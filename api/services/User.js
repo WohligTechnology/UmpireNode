@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
+var md5 = require("md5");
 var schema = new Schema({
     name: String,
     password: String,
@@ -14,6 +14,7 @@ module.exports = mongoose.model('User', schema);
 
 var models = {
     saveData: function (data, callback) {
+        //        delete data.password;
         var user = this(data);
         if (data._id) {
             data.expiry = new Date(data.expiry);
@@ -32,6 +33,7 @@ var models = {
         } else {
             user.timestamp = new Date();
             data.expiry = new Date();
+            user.password = md5(user.password);
             user.save(function (err, created) {
                 if (err) {
                     callback(err, null);
@@ -142,26 +144,40 @@ var models = {
                 }
             });
     },
+
+    // login by pooja
+
     login: function (data, callback) {
-        if (data.password && data.password) {
-            data.password = sails.md5(data.password);
-        }
         this.findOne({
-            mobile: data.mobile,
+            mobile: data.contact,
             password: data.password,
             expiry: {
                 $gte: new Date()
             }
         }, {
-            password: 0
-        }).exec(function (err, found) {
+            name: 1,
+            expiry: 1,
+            _id: 0
+        }).exec(function (err, data2) {
             if (err) {
-                console.log(err);
                 callback(err, null);
-            } else if (found && found.email != "") {
-                callback(null, found);
             } else {
-                callback(null, {});
+                var cutoff = new Date();
+                //check expiry date
+                this.find({
+                    expiry: {
+                        $gte: cutoff
+                    }
+                }, function (err, data2) {
+                    if (err) {
+                        console.log(err);
+                        callback(err, null);
+                    } else if (data2) {
+                        callback(null, data2);
+                    }
+
+                });
+
             }
         });
     },

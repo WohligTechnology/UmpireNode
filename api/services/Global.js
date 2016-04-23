@@ -12,7 +12,7 @@ module.exports = {
                 value: false,
                 data: err
             });
-        } else if (data.length > 0 || Object.keys(data).length > 0) {
+        } else if (data && (data.length > 0 || Object.keys(data).length > 0)) {
             res.json({
                 value: true,
                 data: data

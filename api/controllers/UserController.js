@@ -53,6 +53,7 @@ module.exports = {
     },
     findLimited: function (req, res) {
         function callback(err, data) {
+            console.log(data);
             Global.response(err, data, res);
         }
         if (req.body) {
@@ -72,11 +73,12 @@ module.exports = {
         }
     },
     login: function (req, res) {
-        function callback(err, data) {
+         function callback(err, data) {
             Global.response(err, data, res);
         }
         if (req.body) {
-            if (req.body.mobile && req.body.mobile != "" && req.body.password && req.body.password != "") {
+            
+            if (req.body.contact && req.body.contact != "" && req.body.password && req.body.password != "") {
                 User.login(req.body, callback);
             } else {
                 res.json({
@@ -89,6 +91,17 @@ module.exports = {
                 value: false,
                 data: "Invalid Request"
             });
+        }
+    },
+    
+
+    
+    profile: function (req, res) {
+        var user = req.session.user;
+        if (user) {
+            res.json(user);
+        } else {
+            res.json({});
         }
     },
     changePassword: function (req, res) {
