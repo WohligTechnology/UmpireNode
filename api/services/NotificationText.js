@@ -2,24 +2,15 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
-    match: {
-        type: Schema.Types.ObjectId,
-        ref: 'Match',
-        index: true
-    },
-    favourite: String,
-    team1back: String,
-    team2back: String,
-    team1lay: String,
-    team2lay: String,
+    title: String,
     timestamp: Date
 });
 
-module.exports = mongoose.model('Rate', schema);
+module.exports = mongoose.model('NotificationText', schema);
 
 var models = {
     saveData: function (data, callback) {
-        var rate = this(data);
+        var notificationtext = this(data);
         if (data._id) {
             this.findOneAndUpdate({
                 _id: data._id
@@ -34,8 +25,8 @@ var models = {
                 }
             });
         } else {
-            rate.timestamp = new Date();
-            rate.save(function (err, created) {
+            notificationtext.timestamp = new Date();
+            notificationtext.save(function (err, created) {
                 if (err) {
                     callback(err, null);
                 } else if (created) {
@@ -93,8 +84,8 @@ var models = {
         data.pagesize = parseInt(data.pagesize);
         async.parallel([
                 function (callback) {
-                    Rate.count({
-                        name: {
+                    NotificationText.count({
+                        title: {
                             '$regex': check
                         }
                     }).exec(function (err, number) {
@@ -111,12 +102,10 @@ var models = {
                     });
                 },
                 function (callback) {
-                    Rate.find({
-                        name: {
+                    NotificationText.find({
+                        title: {
                             '$regex': check
                         }
-                    }, {
-                        password: 0
                     }).skip(data.pagesize * (data.pagenumber - 1)).limit(data.pagesize).exec(function (err, data2) {
                         if (err) {
                             console.log(err);

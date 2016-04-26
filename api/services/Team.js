@@ -11,6 +11,7 @@ module.exports = mongoose.model('Team', schema);
 var models = {
     saveData: function (data, callback) {
         var team = this(data);
+        team.timestamp = new Date();
         if (data._id) {
             this.findOneAndUpdate({
                 _id: data._id

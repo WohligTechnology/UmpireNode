@@ -4,7 +4,7 @@ module.exports = {
             Global.response(err, data, res);
         }
         if (req.body) {
-            Match.saveData(req.body, callback);
+            Session.saveData(req.body, callback);
         } else {
             res.json({
                 value: false,
@@ -17,7 +17,7 @@ module.exports = {
             Global.response(err, data, res);
         }
         if (req.body) {
-            Match.deleteData(req.body, callback);
+            Session.deleteData(req.body, callback);
         } else {
             res.json({
                 value: false,
@@ -30,7 +30,7 @@ module.exports = {
             Global.response(err, data, res);
         }
         if (req.body) {
-            Match.getAll(req.body, callback);
+            Session.getAll(req.body, callback);
         } else {
             res.json({
                 value: false,
@@ -39,8 +39,11 @@ module.exports = {
         }
     },
     findOne: function (req, res) {
+        function callback(err, data) {
+            Global.response(err, data, res);
+        }
         if (req.body) {
-            Match.getOne(req.body, res.callback);
+            Session.getOne(req.body, callback);
         } else {
             res.json({
                 value: false,
@@ -49,9 +52,12 @@ module.exports = {
         }
     },
     findLimited: function (req, res) {
+        function callback(err, data) {
+            Global.response(err, data, res);
+        }
         if (req.body) {
             if (req.body.pagenumber && req.body.pagenumber != "" && req.body.pagesize && req.body.pagesize != "") {
-                Match.findLimited(req.body, res.callback);
+                Session.findLimited(req.body, callback);
             } else {
                 res.json({
                     value: false,

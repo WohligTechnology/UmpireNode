@@ -73,11 +73,32 @@ module.exports = {
         }
     },
     login: function (req, res) {
-         function callback(err, data) {
-            Global.response(err, data, res);
+        function callback(err, data) {
+            if (err) {
+                res.json({
+                    value: false,
+                    data: {
+                        message: err
+                    }
+                });
+            } else if (data.name) {
+                console.log(data);
+                delete data.password;
+                req.session.user = data;
+                req.session.save();
+                delete data._id;
+                res.json({
+                    value: true,
+                    data: data
+                });
+            } else {
+                res.json({
+                    value: false,
+                    data: data
+                });
+            }
         }
         if (req.body) {
-            
             if (req.body.contact && req.body.contact != "" && req.body.password && req.body.password != "") {
                 User.login(req.body, callback);
             } else {
@@ -93,10 +114,9 @@ module.exports = {
             });
         }
     },
-    
 
-    
     profile: function (req, res) {
+
         var user = req.session.user;
         if (user) {
             res.json(user);
@@ -109,12 +129,20 @@ module.exports = {
             Global.response(err, data, res);
         }
         if (req.body) {
-            if (req.body._id && req.body._id != "" && req.body.password && req.body.password != "" && req.body.editpassword && req.body.editpassword != "") {
-                User.changePassword(req.body, callback);
+            if (req.session.user) {
+                req.body._id=req.session.user._id;
+                if (req.body.oldPassword && req.body.oldPassword != "" && req.body.newPassword && req.body.newPassword != "") {
+                    User.changePassword(req.body, callback);
+                } else {
+                    res.json({
+                        value: false,
+                        data: "Please provide parameters"
+                    });
+                }
             } else {
                 res.json({
                     value: false,
-                    data: "Please provide parameters"
+                    data: "User not logged-in"
                 });
             }
         } else {
@@ -123,5 +151,67 @@ module.exports = {
                 data: "Invalid Request"
             });
         }
-    }
+    },
+
+    // become a member
+
+    becomeMember: function (req, res) {
+        function callback(err, data) {
+            if (err) {
+                res.json({
+                    value: false,
+                    data: {
+                        message: err
+                    }
+                });
+            } else if (data.name) {
+
+                res.json({
+                    value: true,
+                    data: {
+                        message: "MemberCreated"
+                    }
+                });
+            } else {
+                res.json({
+                    value: false,
+                    data: data
+                });
+            }
+        }
+        if (req.body) {
+            User.becomeMember(req.body, callback);
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Request"
+            });
+        }
+    },
+
+    //    changePassword: function (req, res) {
+    //        function callback(err, data) {
+    //            if (err) {
+    //                res.json({
+    //                    value: false,
+    //                    data: {
+    //                        message: err
+    //                    }
+    //                });
+    //            } else {
+    //                res.json({
+    //                    value: false,
+    //                    data: data
+    //                });
+    //            }
+    //        }
+    //        if (req.body) {
+    //            User.chagePassword(req.body, callback);
+    //        } else {
+    //            res.json({
+    //                value: false,
+    //                data: "Invalid Request"
+    //            });
+    //        }
+    //    },
 };

@@ -7,19 +7,17 @@ var schema = new Schema({
         ref: 'Match',
         index: true
     },
-    favourite: String,
-    team1back: String,
-    team2back: String,
-    team1lay: String,
-    team2lay: String,
+    inning: Number,
+    run: Number,
+    over: Number,
     timestamp: Date
 });
 
-module.exports = mongoose.model('Rate', schema);
+module.exports = mongoose.model('Session', schema);
 
 var models = {
     saveData: function (data, callback) {
-        var rate = this(data);
+        var Session = this(data);
         if (data._id) {
             this.findOneAndUpdate({
                 _id: data._id
@@ -34,8 +32,8 @@ var models = {
                 }
             });
         } else {
-            rate.timestamp = new Date();
-            rate.save(function (err, created) {
+            Session.timestamp = new Date();
+            Session.save(function (err, created) {
                 if (err) {
                     callback(err, null);
                 } else if (created) {
@@ -71,6 +69,18 @@ var models = {
             }
         });
     },
+    getAllByMatch: function (data, callback) {
+        this.find({match:data._id}).exec(function (err, found) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+            } else if (found && found.length > 0) {
+                callback(null, found);
+            } else {
+                callback(null, []);
+            }
+        });
+    },
     getOne: function (data, callback) {
         this.findOne({
             "_id": data._id
@@ -88,15 +98,12 @@ var models = {
     findLimited: function (data, callback) {
         var newreturns = {};
         newreturns.data = [];
-        var check = new RegExp(data.search, "i");
         data.pagenumber = parseInt(data.pagenumber);
         data.pagesize = parseInt(data.pagesize);
         async.parallel([
                 function (callback) {
-                    Rate.count({
-                        name: {
-                            '$regex': check
-                        }
+                    Session.count({
+                        inning: parseInt(data.search)
                     }).exec(function (err, number) {
                         if (err) {
                             console.log(err);
@@ -111,13 +118,11 @@ var models = {
                     });
                 },
                 function (callback) {
-                    Rate.find({
-                        name: {
-                            '$regex': check
-                        }
+                    Session.find({
+                        inning: parseInt(data.search)
                     }, {
                         password: 0
-                    }).skip(data.pagesize * (data.pagenumber - 1)).limit(data.pagesize).exec(function (err, data2) {
+                    }).skip(data.pagesize * (data.pagenumber - 1)).limit(data.pagesize).populate('Match').exec(function (err, data2) {
                         if (err) {
                             console.log(err);
                             callback(err, null);

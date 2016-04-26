@@ -148,62 +148,108 @@ var models = {
     // login by pooja
 
     login: function (data, callback) {
-        this.findOne({
+        data.password = md5(data.password);
+        User.findOne({
             mobile: data.contact,
-            password: data.password,
-            expiry: {
-                $gte: new Date()
-            }
-        }, {
-            name: 1,
-            expiry: 1,
-            _id: 0
+            password: data.password
         }).exec(function (err, data2) {
             if (err) {
                 callback(err, null);
-            } else {
+            } else if (data2) {
                 var cutoff = new Date();
                 //check expiry date
-                this.find({
+                User.findOne({
+                    mobile: data.contact,
+                    password: data.password,
                     expiry: {
                         $gte: cutoff
                     }
-                }, function (err, data2) {
+                }, {
+                    _id: 1,
+                    name: 1,
+                    expiry: 1
+                }, function (err, data3) {
                     if (err) {
                         console.log(err);
                         callback(err, null);
-                    } else if (data2) {
-                        callback(null, data2);
+                    } else if (data3) {
+                        data3.password = "";
+                        callback(null, data3);
+                    } else {
+                        callback(null, {
+                            message: "DateExpired"
+                        });
                     }
 
                 });
 
+            } else {
+                callback(null, {
+                    message: "IncorrectCredentials"
+                });
             }
         });
     },
     changePassword: function (data, callback) {
-        if (data.password && data.password != "") {
-            data.password = sails.md5(data.password);
+        if (data.oldPassword && data.oldPassword != "") {
+            data.oldPassword = md5(data.oldPassword);
         }
-        if (data.editpassword && data.editpassword != "") {
-            data.editpassword = sails.md5(data.editpassword);
+        if (data.newPassword && data.newPassword != "") {
+            data.newPassword = md5(data.newPassword);
         }
         this.findOneAndUpdate({
             _id: data._id,
-            password: data.password
+            password: data.oldPassword
         }, {
-            password: data.editpassword
+            password: data.newPassword
         }).exec(function (err, updated) {
             if (err) {
                 console.log(err);
                 callback(err, null);
             } else if (updated) {
-                callback(null, updated);
+                callback(null, {
+                    message: "PasswordChangedSuccessfully"
+                });
             } else {
-                callback(null, {});
+                callback(null, {
+                    message: "IncorrectOldPAssword"
+                });
             }
         });
-    }
+    },
+
+    // become a member
+
+    becomeMember: function (data, callback) {
+        var register = this(data);
+        register.timestamp = new Date();
+        register.mobile = data.contact;
+        //        check if user present
+
+        this.findOne({
+            "mobile": register.mobile
+        }).exec(function (err, found) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                register.save(function (err, created) {
+                    if (err) {
+                        callback(err, null);
+                    } else {
+                        callback(null, created);
+                    }
+                });
+            } else {
+                callback(null, {
+                    message: "UserAlreadyRegistered"
+                });
+            }
+        });
+
+    },
+
+  
 };
 
 module.exports = _.assign(module.exports, models);

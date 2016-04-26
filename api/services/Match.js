@@ -13,7 +13,7 @@ var schema = new Schema({
         index: true
     },
     venue: String,
-    overs: String,
+    overs: Number,
     link: String,
     result: String,
     tournament: {
@@ -21,15 +21,28 @@ var schema = new Schema({
         ref: 'Tournament',
         index: true
     },
-    resultdesc: String,
+    comment: String,
     toss: String,
-    firstbat: String,
+    firstBat: Number,
     team1score: String,
     team2score: String,
     status: String,
     newtarget: String,
-    newovers: String,
-    timestamp: Date
+    newOvers: Number,
+    startTime: Date,
+    bat: Number,
+    suspended: Boolean,
+    cupName: String,
+    team1Runs: Number,
+    team1Wicket: Number,
+    team1Overs: Number,
+    team2Runs: Number,
+    team2Overs: Number,
+    team2Wicket: Number,
+    favorite: Number,
+    rate1: Number,
+    rate2: Number
+
 });
 
 module.exports = mongoose.model('Match', schema);
@@ -91,12 +104,34 @@ var models = {
     getOne: function (data, callback) {
         this.findOne({
             "_id": data._id
-        }).exec(function (err, found) {
+        }).populate([{
+            path: "team1",
+            select: {
+                _id: 0,
+                name: 1
+            }
+        }]).populate([{
+            path: "team2",
+            select: {
+                _id: 0,
+                name: 1
+            }
+        }]).exec(function (err, found) {
             if (err) {
                 console.log(err);
                 callback(err, null);
             } else if (found && Object.keys(found).length > 0) {
-                callback(null, found);
+                console.log(found);
+                Session.getAllByMatch(data,function(err,sessionData) {
+                    if(!err) {
+                        var found2 = _.clone(found._doc);
+                        found2.session = sessionData;
+                        console.log(found2.session);
+                        callback(null, found2);
+                    }
+                    
+                });
+                
             } else {
                 callback(null, {});
             }
@@ -111,7 +146,7 @@ var models = {
         async.parallel([
                 function (callback) {
                     Match.count({
-                        name: {
+                        cupName: {
                             '$regex': check
                         }
                     }).exec(function (err, number) {
@@ -129,17 +164,34 @@ var models = {
                 },
                 function (callback) {
                     Match.find({
-                        name: {
+                        cupName: {
                             '$regex': check
                         }
-                    }, {
-                        password: 0
-                    }).skip(data.pagesize * (data.pagenumber - 1)).limit(data.pagesize).exec(function (err, data2) {
+                    }).skip(data.pagesize * (data.pagenumber - 1)).limit(data.pagesize).populate([{
+                        path: "team1",
+                        select: {
+                            _id: 0,
+                            name: 1
+                        }
+                    }]).populate([{
+                        path: "team2",
+                        select: {
+                            _id: 0,
+                            name: 1
+                        }
+                    }]).exec(function (err, data2) {
                         if (err) {
                             console.log(err);
                             callback(err, null);
                         } else if (data2 && data2.length > 0) {
                             newreturns.data = data2;
+                            //                            console.log(newreturns.data);
+                            for (var j = 0; j < newreturns.data; j++) {
+                                console.log(j);
+                                console.log("in for");
+                            }
+                            //                            data2.team1 = data2.team1.name;
+                            //                            data2.team2 = data2.team2.name;
                             callback(null, newreturns);
                         } else {
                             callback(null, newreturns);
