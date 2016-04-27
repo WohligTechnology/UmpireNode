@@ -63,15 +63,29 @@ module.exports.http = {
                 error: err,
                 value: false,
                 serverTime:Date(),
-                userid:req.session.userid
             });
         } else {
-            res.json({
-                data: data,
-                value: true,
-                serverTime:Date(),
-                userid:req.session.userid
-            });
+          User.findOne({
+              "_id": req.session.user._id
+          }).exec(function(err,userdata) {
+            if(!err)
+            {
+              res.json({
+                  data: data,
+                  value: true,
+                  serverTime:Date(),
+                  userid:userdata.userid
+              });
+            }
+            else {
+              res.json({
+                  error: err,
+                  value: false,
+                  serverTime:Date(),
+              });
+            }
+          });
+
         }
     };
     res.validate = function(format) {

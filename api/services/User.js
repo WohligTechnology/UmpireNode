@@ -6,6 +6,7 @@ var schema = new Schema({
     mobile: String,
     deviceid: String,
     expiry: Date,
+    userid: {type:Date,default:Date.now},
     timestamp: Date
 });
 
@@ -17,6 +18,7 @@ var models = {
         var user = this(data);
         if (data._id) {
             data.expiry = new Date(data.expiry);
+            data.userid = new Date();
             this.findOneAndUpdate({
                 _id: data._id
             }, data).exec(function (err, updated) {
@@ -33,6 +35,7 @@ var models = {
             user.timestamp = new Date();
             data.expiry = new Date();
             user.password = sails.md5(user.password);
+
             user.save(function (err, created) {
                 if (err) {
                     callback(err, null);

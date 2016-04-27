@@ -84,14 +84,13 @@ module.exports = {
             } else if (data.name) {
                 delete data.password;
                 req.session.user = data;
-                req.session.userid = sails.md5(data._id+Date()+_.random(0,1000000));
                 req.session.save();
                 console.log(req.session);
                 delete data._id;
                 res.json({
                     value: true,
                     data: data,
-                    userid: req.session.userid
+                    userid: data.userid
                 });
             } else {
                 res.json({

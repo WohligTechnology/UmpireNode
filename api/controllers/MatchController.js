@@ -48,11 +48,25 @@ module.exports = {
           userid:req.session.userid
         });
       } else {
-        res.json({
-          data: data,
-          value: true,
-          serverTime: Date(),
-          userid:req.session.userid
+        User.findOne({
+            "_id": req.session.user._id
+        }).exec(function(err,userdata) {
+          if(!err)
+          {
+            res.json({
+                data: data,
+                value: true,
+                serverTime:Date(),
+                userid:userdata.userid
+            });
+          }
+          else {
+            res.json({
+                error: err,
+                value: false,
+                serverTime:Date(),
+            });
+          }
         });
       }
     };
@@ -77,6 +91,7 @@ module.exports = {
     }
   },
   findLimited: function(req, res) {
+
     if (req.body) {
       if (req.body.pagenumber && req.body.pagenumber !== "" && req.body.pagesize && req.body.pagesize !== "") {
         Match.findLimited(req.body, res.callback);
@@ -98,12 +113,28 @@ module.exports = {
       if (err) {
 
       } else {
-        sails.sockets.broadcast(req.body._id, {
-          data: data,
-          value: true,
-          serverTime: Date(),
-          userid:req.session.userid
+        User.findOne({
+            "_id": req.session.user._id
+        }).exec(function(err,userdata) {
+          if(!err)
+          {
+            sails.sockets.broadcast(req.body._id, {
+              data: data,
+              value: true,
+              serverTime: Date(),
+              userid:userdata.userid
+            });
+
+          }
+          else {
+            res.json({
+                error: err,
+                value: false,
+                serverTime:Date(),
+            });
+          }
         });
+
         console.log("SOCKET CALLED");
       }
     };
