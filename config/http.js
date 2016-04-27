@@ -56,19 +56,21 @@ module.exports.http = {
    ****************************************************************************/
 
   myRequestLogger: function(req, res, next) {
-    
+
     res.callback = function(err, data) {
         if (err) {
             res.json({
                 error: err,
                 value: false,
-                serverTime:Date()
+                serverTime:Date(),
+                userid:req.session.userid
             });
         } else {
             res.json({
                 data: data,
                 value: true,
-                serverTime:Date()
+                serverTime:Date(),
+                userid:req.session.userid
             });
         }
     };

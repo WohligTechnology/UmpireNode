@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var md5 = require("md5");
 var schema = new Schema({
     name: String,
     password: String,
@@ -33,7 +32,7 @@ var models = {
         } else {
             user.timestamp = new Date();
             data.expiry = new Date();
-            user.password = md5(user.password);
+            user.password = sails.md5(user.password);
             user.save(function (err, created) {
                 if (err) {
                     callback(err, null);
@@ -104,7 +103,7 @@ var models = {
                         if (err) {
                             console.log(err);
                             callback(err, null);
-                        } else if (number && number != "") {
+                        } else if (number && number !== "") {
                             newreturns.total = number;
                             newreturns.totalpages = Math.ceil(number / data.pagesize);
                             callback(null, newreturns);
@@ -148,7 +147,7 @@ var models = {
     // login by pooja
 
     login: function (data, callback) {
-        data.password = md5(data.password);
+        data.password = sails.md5(data.password);
         User.findOne({
             mobile: data.contact,
             password: data.password
@@ -170,7 +169,6 @@ var models = {
                     expiry: 1
                 }, function (err, data3) {
                     if (err) {
-                        console.log(err);
                         callback(err, null);
                     } else if (data3) {
                         data3.password = "";
@@ -191,11 +189,11 @@ var models = {
         });
     },
     changePassword: function (data, callback) {
-        if (data.oldPassword && data.oldPassword != "") {
-            data.oldPassword = md5(data.oldPassword);
+        if (data.oldPassword && data.oldPassword !== "") {
+            data.oldPassword = sails.md5(data.oldPassword);
         }
-        if (data.newPassword && data.newPassword != "") {
-            data.newPassword = md5(data.newPassword);
+        if (data.newPassword && data.newPassword !== "") {
+            data.newPassword = sails.md5(data.newPassword);
         }
         this.findOneAndUpdate({
             _id: data._id,
@@ -249,7 +247,7 @@ var models = {
 
     },
 
-  
+
 };
 
 module.exports = _.assign(module.exports, models);

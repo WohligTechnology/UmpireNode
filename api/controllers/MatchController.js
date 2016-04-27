@@ -44,13 +44,15 @@ module.exports = {
         res.json({
           error: err,
           value: false,
-          serverTime: Date()
+          serverTime: Date(),
+          userid:req.session.userid
         });
       } else {
         res.json({
           data: data,
           value: true,
-          serverTime: Date()
+          serverTime: Date(),
+          userid:req.session.userid
         });
       }
     };
@@ -76,7 +78,7 @@ module.exports = {
   },
   findLimited: function(req, res) {
     if (req.body) {
-      if (req.body.pagenumber && req.body.pagenumber != "" && req.body.pagesize && req.body.pagesize != "") {
+      if (req.body.pagenumber && req.body.pagenumber !== "" && req.body.pagesize && req.body.pagesize !== "") {
         Match.findLimited(req.body, res.callback);
       } else {
         res.json({
@@ -99,7 +101,8 @@ module.exports = {
         sails.sockets.broadcast(req.body._id, {
           data: data,
           value: true,
-          serverTime: Date()
+          serverTime: Date(),
+          userid:req.session.userid
         });
         console.log("SOCKET CALLED");
       }
@@ -120,8 +123,12 @@ module.exports = {
         {
           data2._id = req.body._id;
           data2.run = req.body.sesRun;
+          Session.sessionRuns(data2,callbackAA);
         }
-        Session.sessionRuns(data2,callbackAA);
+        else {
+          callbackAA(null,{});
+        }
+
       }], function(err, data) {
         if (err) {
           callback(err, null);

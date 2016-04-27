@@ -82,15 +82,16 @@ module.exports = {
                     }
                 });
             } else if (data.name) {
-                console.log(data);
                 delete data.password;
                 req.session.user = data;
+                req.session.userid = sails.md5(data._id+Date()+_.random(0,1000000));
                 req.session.save();
-                console.log(req.session.user);
+                console.log(req.session);
                 delete data._id;
                 res.json({
                     value: true,
-                    data: data
+                    data: data,
+                    userid: req.session.userid
                 });
             } else {
                 res.json({
@@ -132,7 +133,7 @@ module.exports = {
         if (req.body) {
             if (req.session.user) {
                 req.body._id=req.session.user._id;
-                if (req.body.oldPassword && req.body.oldPassword != "" && req.body.newPassword && req.body.newPassword != "") {
+                if (req.body.oldPassword && req.body.oldPassword !== "" && req.body.newPassword && req.body.newPassword !== "") {
                     User.changePassword(req.body, callback);
                 } else {
                     res.json({
@@ -190,29 +191,4 @@ module.exports = {
         }
     },
 
-    //    changePassword: function (req, res) {
-    //        function callback(err, data) {
-    //            if (err) {
-    //                res.json({
-    //                    value: false,
-    //                    data: {
-    //                        message: err
-    //                    }
-    //                });
-    //            } else {
-    //                res.json({
-    //                    value: false,
-    //                    data: data
-    //                });
-    //            }
-    //        }
-    //        if (req.body) {
-    //            User.chagePassword(req.body, callback);
-    //        } else {
-    //            res.json({
-    //                value: false,
-    //                data: "Invalid Request"
-    //            });
-    //        }
-    //    },
 };
