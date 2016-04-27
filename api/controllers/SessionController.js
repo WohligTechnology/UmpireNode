@@ -71,4 +71,15 @@ module.exports = {
             });
         }
     },
+    sessionRuns: function (req, res) {
+      console.log(req.body);
+        if (req.body) {
+            Session.sessionRuns(req.body, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Request"
+            });
+        }
+    }
 };

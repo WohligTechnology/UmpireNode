@@ -89,6 +89,23 @@ var models = {
             }
         });
     },
+
+    change: function(data,callback){
+      if (data._id) {
+          this.findOneAndUpdate({
+              _id: data._id
+          }, {$set:data}).exec(function (err, updated) {
+              if (err) {
+                  console.log(err);
+                  callback(err, null);
+              } else if (updated) {
+                  callback(null, updated);
+              } else {
+                  callback(null, {});
+              }
+          });
+      }
+    },
     getAll: function (data, callback) {
         this.find({}).exec(function (err, found) {
             if (err) {
@@ -116,22 +133,19 @@ var models = {
                 _id: 0,
                 name: 1
             }
-        }]).exec(function (err, found) {
+        }]).lean().exec(function (err, found) {
             if (err) {
                 console.log(err);
                 callback(err, null);
             } else if (found && Object.keys(found).length > 0) {
-                console.log(found);
                 Session.getAllByMatch(data,function(err,sessionData) {
                     if(!err) {
-                        var found2 = _.clone(found._doc);
-                        found2.session = sessionData;
-                        console.log(found2.session);
-                        callback(null, found2);
+                        found.session = sessionData;
+                        callback(null, found);
                     }
-                    
+
                 });
-                
+
             } else {
                 callback(null, {});
             }
@@ -201,7 +215,6 @@ var models = {
             ],
             function (err, data4) {
                 if (err) {
-                    console.log(err);
                     callback(err, null);
                 } else if (data4) {
                     callback(null, newreturns);

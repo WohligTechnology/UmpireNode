@@ -57,7 +57,7 @@ module.exports = {
             Global.response(err, data, res);
         }
         if (req.body) {
-            if (req.body.pagenumber && req.body.pagenumber != "" && req.body.pagesize && req.body.pagesize != "") {
+            if (req.body.pagenumber && req.body.pagenumber !== "" && req.body.pagesize && req.body.pagesize !== "") {
                 User.findLimited(req.body, callback);
             } else {
                 res.json({
@@ -86,6 +86,7 @@ module.exports = {
                 delete data.password;
                 req.session.user = data;
                 req.session.save();
+                console.log(req.session.user);
                 delete data._id;
                 res.json({
                     value: true,
@@ -99,7 +100,7 @@ module.exports = {
             }
         }
         if (req.body) {
-            if (req.body.contact && req.body.contact != "" && req.body.password && req.body.password != "") {
+            if (req.body.contact && req.body.contact !== "" && req.body.password && req.body.password !== "") {
                 User.login(req.body, callback);
             } else {
                 res.json({
