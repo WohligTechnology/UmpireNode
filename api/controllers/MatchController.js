@@ -40,11 +40,10 @@ module.exports = {
   },
   findOne: function(req, res) {
     var callback = function(err, data) {
-      if (err) {
+      if (err || !req.session.user) {
         res.json({
           error: err,
           value: false,
-          serverTime: Date(),
           userid:req.session.userid
         });
       } else {
@@ -63,8 +62,7 @@ module.exports = {
           else {
             res.json({
                 error: err,
-                value: false,
-                serverTime:Date(),
+                value: false
             });
           }
         });
@@ -116,7 +114,7 @@ module.exports = {
         User.findOne({
             "_id": req.session.user._id
         }).exec(function(err,userdata) {
-          if(!err)
+          if(!err )
           {
             sails.sockets.broadcast(req.body._id, {
               data: data,

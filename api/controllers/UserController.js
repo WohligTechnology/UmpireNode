@@ -86,7 +86,6 @@ module.exports = {
                 req.session.user = data;
                 req.session.save();
                 console.log(req.session);
-                delete data._id;
                 res.json({
                     value: true,
                     data: data,

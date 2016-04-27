@@ -58,13 +58,15 @@ module.exports.http = {
   myRequestLogger: function(req, res, next) {
 
     res.callback = function(err, data) {
-        if (err) {
+      console.log(err);
+      console.log(req.session.user);
+        if (err || !req.session.user) {
             res.json({
                 error: err,
-                value: false,
-                serverTime:Date(),
+                value: false
             });
         } else {
+
           User.findOne({
               "_id": req.session.user._id
           }).exec(function(err,userdata) {
@@ -80,8 +82,7 @@ module.exports.http = {
             else {
               res.json({
                   error: err,
-                  value: false,
-                  serverTime:Date(),
+                  value: false
               });
             }
           });
