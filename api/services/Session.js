@@ -173,7 +173,7 @@ var models = {
                         if (err) {
                             console.log(err);
                             callback(err, null);
-                        } else if (number && number != "") {
+                        } else if (number && number !== "") {
                             newreturns.total = number;
                             newreturns.totalpages = Math.ceil(number / data.pagesize);
                             callback(null, newreturns);
@@ -257,8 +257,6 @@ var models = {
         });
 
     },
-
-
     // INCREMENT runs
 
     incrementRun: function(incrementRun, bat, matchid, runs, callback) {
@@ -268,7 +266,7 @@ var models = {
         } else if (incrementRun == -1) {
             newruns -= 1;
         }
-        var updateVal={};
+        var updateVal = {};
         if (bat == 1) {
             updateVal.team1Runs = newruns;
         } else {
@@ -284,6 +282,174 @@ var models = {
                 callback(err, null);
             } else if (updated) {
                 callback(null, updated);
+            } else {
+                callback(null, {});
+            }
+        });
+
+    },
+
+    // INCREMENT wicket
+
+    incrementWicket: function(incrementWicket, bat, matchid, wicket, callback) {
+        newwicket = wicket;
+        if (incrementWicket == 1) {
+            newwicket += 1;
+        } else if (incrementWicket == -1) {
+            newwicket -= 1;
+        }
+        var updateVal = {};
+        if (bat == 1) {
+            updateVal.team1Wicket = newwicket;
+        } else {
+            updateVal.team2Wicket = newwicket;
+        }
+        Match.findOneAndUpdate({
+            _id: matchid
+        }, {
+            $set: updateVal
+        }).exec(function(err, updated) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+            } else if (updated) {
+                callback(null, updated);
+            } else {
+                callback(null, {});
+            }
+        });
+
+    },
+    // CHANEG BAT
+
+    changeBat: function(changeBat, bat, matchid, callback) {
+
+        if (changeBat === true && bat == 1) {
+            newbat = 2;
+        } else if (changeBat === true && bat == 2) {
+            newbat = 1;
+        }
+        var updateVal = {};
+        updateVal.bat = newbat;
+        Match.findOneAndUpdate({
+            _id: matchid
+        }, {
+            $set: updateVal
+        }).exec(function(err, updated) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+            } else if (updated) {
+                callback(null, updated);
+            } else {
+                callback(null, {});
+            }
+        });
+
+    },
+    // CHANEG RATE
+
+    changeRate: function(rate1, rate2, matchid, callback) {
+
+        Match.findOneAndUpdate({
+            _id: matchid
+        }, {
+            $set: {
+                "rate1": rate1,
+                "rate2": rate2
+            }
+        }).exec(function(err, updated) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+            } else if (updated) {
+                callback(null, updated);
+            } else {
+                callback(null, {});
+            }
+        });
+
+    },
+
+    // CHANEG BAT
+
+    changeFavourite: function(changeFavourite, favourite, matchid, callback) {
+
+        var newfavourite = favourite;
+        if (changeFavourite === true && favourite == 1) {
+            newfavourite = 2;
+        } else if (changeFavourite === true && favourite == 2) {
+            newfavourite = 1;
+        }
+        var updateVal = {};
+        updateVal.favorite = newfavourite;
+        Match.findOneAndUpdate({
+            _id: matchid
+        }, {
+            $set: {
+                "favorite": newfavourite
+            }
+        }).exec(function(err, updated) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+            } else if (updated) {
+                callback(null, updated);
+            } else {
+                callback(null, {});
+            }
+        });
+
+    },
+
+    // CREATE SESSION
+
+    createSession: function(matchid, inning, over, runs, callback) {
+
+        // check if already there
+        Session.findOne({
+            match: matchid,
+            inning: inning,
+            over: over
+
+        }).exec(function(err, updated) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+            } else if (updated) {
+              console.log("updated");console.log(updated);
+                callback(null, updated);
+            } else {
+                var Session2 = new Session({
+                    match: matchid,
+                    inning: inning,
+                    over: over
+                });
+                Session2.save(function(err, created) {
+                    if (err) {
+                        callback(err, null);
+                    } else if (created) {
+                        callback(null, created);
+                    } else {
+                        callback(null, {});
+                    }
+                });
+
+            }
+        });
+
+    },
+    // DELETE SESSION
+
+    deleteSession: function(data, callback) {
+        Session.findOneAndRemove({
+            match: data._id,
+            over: data.overs
+        }, function(err, deleted) {
+            if (err) {
+                callback(err, null);
+            } else if (deleted) {
+                callback(null, deleted);
             } else {
                 callback(null, {});
             }

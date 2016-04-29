@@ -87,21 +87,26 @@ module.exports = {
         var runs = 0;
         var bat = 0;
         var matchid = 0;
+        var favourite = 0;
 
         function callback(err, data) {
             // OVERS
             bat = data.bat;
+            favourite = data.favorite;
+            console.log(data);
             if (bat == 1) {
                 over = data.team1Overs;
                 runs = data.team1Runs;
+                wicket = data.team1Wicket;
             } else {
                 over = data.team2Overs;
                 runs = data.team2Runs;
+                wicket = data.team2Wicket;
             }
 
 
             if (req.body.incrementBall !== '' && req.body.incrementBall) {
-                console.log("In IB");
+
                 Session.incrementBall(req.body.incrementBall, bat, req.body._id, over, res.callback2);
             }
 
@@ -109,33 +114,83 @@ module.exports = {
             else if (req.body.incrementRun !== '' && req.body.incrementRun) {
 
                 Session.incrementRun(req.body.incrementRun, bat, req.body._id, runs, res.callback2);
+            }
+            // increment wicket
+            else if (req.body.incrementWicket !== '' && req.body.incrementWicket) {
+                Session.incrementWicket(req.body.incrementWicket, bat, req.body._id, wicket, res.callback2);
+            }
+            // change bat
+            else if (req.body.changeBat !== '' && req.body.changeBat) {
+                Session.changeBat(req.body.changeBat, bat, req.body._id, res.callback2);
+            }
+            // change bat
+            else if (req.body.rate1 !== '' && req.body.rate1 && req.body.rate2 !== '' && req.body.rate2) {
+                Session.changeRate(req.body.rate1, req.body.rate2, req.body._id, res.callback2);
+            }
+            // change favourite
+            else if (req.body.changeFavourite !== '' && req.body.changeFavourite) {
+                Session.changeFavourite(req.body.changeFavourite, favourite, req.body._id, res.callback2);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Request"
+                });
+            }
+
         }
-        // increment wicket
-        else if (req.body.incrementWicket !== '' && req.body.incrementWicket) {
-            Session.incrementWicket(req.body, res.callback);
+        if (req.body) {
+            Match.getOneForBackend(req.body, callback);
+        } else {}
+
+    },
+
+
+    // CREATE SESSION
+
+    createSession: function(req, res) {
+      console.log("In session");
+        var inning = 0;
+        var runs = 0;
+        var bat = 0;
+        var matchid = 0;
+
+        function callback(err, data) {
+            bat = data.bat;
+            firstBat = data.firstBat;
+            if (bat == 1) {
+                runs = data.team1Runs;
+            } else if (bat == 2) {
+                runs = data.team2Runs;
+            }
+            if (bat == firstBat) {
+                inning = 1;
+            } else {
+                inning = 2;
+            }
+            Session.createSession(req.body._id, inning, req.body.overs, runs, res.callback2);
         }
-        // change bat
-        else if (req.body.changeBat !== '' && req.body.changeBat) {
-            Session.changeBat(req.body, res.callback);
-        }
-        // change bat
-        else if (req.body.rate1 !== '' && req.body.rate1 && req.body.rate2 !== '' && req.body.rate2) {
-            Session.changeRate(req.body, res.callback);
-        }
-        // change favourite
-        else if (req.body.changeFavourite !== '' && req.body.changeFavourite) {
-            Session.changeFavourite(req.body, res.callback);
+        if (req.body.overs !== "" && req.body.overs) {
+            console.log(req.body);
+            Match.getOneForBackend(req.body, callback);
         } else {
             res.json({
                 value: false,
                 data: "Invalid Request"
             });
         }
+    },
+    // DELETE SESSION
 
-    }
-    if (req.body) {
-        Match.getOneForBackend(req.body, callback);
-    } else {}
+    deleteSession: function(req, res) {
 
-},
+        if (req.body.overs !== "" && req.body.overs) {
+            console.log(req.body);
+            Session.deleteSession(req.body, res.callback2);
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Request"
+            });
+        }
+    },
 };
