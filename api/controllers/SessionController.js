@@ -88,6 +88,24 @@ module.exports = {
         var bat = 0;
         var matchid = 0;
         var favourite = 0;
+        var socketCallback = function(err, data) {
+            if (err) {
+
+            } else {
+                sails.sockets.broadcast(req.body._id, {
+                    data: data,
+                    value: true,
+                    serverTime: Date()
+                });
+                console.log("SOCKET CALLED");
+            }
+        };
+        var getMatchDetails = function(err, data) {
+            Match.getOne(req.body, socketCallback);
+        };
+
+
+
 
         function callback(err, data) {
             // OVERS
@@ -149,11 +167,11 @@ module.exports = {
                     }
                 },
                 function(err, data) {
-                  console.log("Locha");
+                    console.log("Locha");
                     if (!err) {
-                        res.callback2(null,data);
+                        res.callback2(null, data);
                     } else {
-                        res.callback2(null,err);
+                        res.callback2(null, err);
                     }
                 });
         }
