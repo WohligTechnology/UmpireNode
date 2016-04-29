@@ -4,7 +4,7 @@ module.exports = {
       Global.response(err, data, res);
     }
     if (req.body) {
-      Match.saveData(req.body, callback);
+      Match.saveData(req.body, res.callback2);
     } else {
       res.json({
         value: false,
@@ -12,12 +12,23 @@ module.exports = {
       });
     }
   },
+  findOneForBackend: function (req, res) {
+
+      if (req.body) {
+          Match.getOneForBackend(req.body, res.callback2);
+      } else {
+          res.json({
+              value: false,
+              data: "Invalid Request"
+          });
+      }
+  },
   delete: function(req, res) {
     function callback(err, data) {
       Global.response(err, data, res);
     }
     if (req.body) {
-      Match.deleteData(req.body, callback);
+      Match.deleteData(req.body, res.callback2);
     } else {
       res.json({
         value: false,
@@ -30,7 +41,7 @@ module.exports = {
       Global.response(err, data, res);
     }
     if (req.body) {
-      Match.getAll(req.body, callback);
+      Match.getAll(req.body, res.callback2);
     } else {
       res.json({
         value: false,
@@ -80,7 +91,7 @@ module.exports = {
       });
     }
     if (req.body) {
-      Match.getOne(req.body, callback);
+      Match.getOne(req.body, res.callback2);
     } else {
       res.json({
         value: false,
@@ -92,7 +103,7 @@ module.exports = {
 
     if (req.body) {
       if (req.body.pagenumber && req.body.pagenumber !== "" && req.body.pagesize && req.body.pagesize !== "") {
-        Match.findLimited(req.body, res.callback);
+        Match.findLimited(req.body, res.callback2);
       } else {
         res.json({
           value: false,

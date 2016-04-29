@@ -1,10 +1,8 @@
 module.exports = {
     save: function (req, res) {
-        function callback(err, data) {
-            Global.response(err, data, res);
-        }
+
         if (req.body) {
-            User.saveData(req.body, callback);
+            User.saveData(req.body, res.callback2);
         } else {
             res.json({
                 value: false,
@@ -13,11 +11,9 @@ module.exports = {
         }
     },
     delete: function (req, res) {
-        function callback(err, data) {
-            Global.response(err, data, res);
-        }
+
         if (req.body) {
-            User.deleteData(req.body, callback);
+            User.deleteData(req.body, res.callback2);
         } else {
             res.json({
                 value: false,
@@ -26,11 +22,9 @@ module.exports = {
         }
     },
     find: function (req, res) {
-        function callback(err, data) {
-            Global.response(err, data, res);
-        }
+
         if (req.body) {
-            User.getAll(req.body, callback);
+            User.getAll(req.body, res.callback2);
         } else {
             res.json({
                 value: false,
@@ -39,11 +33,9 @@ module.exports = {
         }
     },
     findOne: function (req, res) {
-        function callback(err, data) {
-            Global.response(err, data, res);
-        }
+
         if (req.body) {
-            User.getOne(req.body, callback);
+            User.getOne(req.body, res.callback2);
         } else {
             res.json({
                 value: false,
@@ -52,13 +44,10 @@ module.exports = {
         }
     },
     findLimited: function (req, res) {
-        function callback(err, data) {
-            console.log(data);
-            Global.response(err, data, res);
-        }
+        
         if (req.body) {
             if (req.body.pagenumber && req.body.pagenumber !== "" && req.body.pagesize && req.body.pagesize !== "") {
-                User.findLimited(req.body, callback);
+                User.findLimited(req.body, res.callback2);
             } else {
                 res.json({
                     value: false,

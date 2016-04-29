@@ -2,16 +2,18 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
-    title: String,
+    email: String,
+    password:String,
+    status:String,
     timestamp: Date
 });
 
-module.exports = mongoose.model('NotificationText', schema);
+module.exports = mongoose.model('AdminUser', schema);
 
 var models = {
     saveData: function (data, callback) {
-        var notificationtext = this(data);
-          notificationtext.timestamp = new Date();
+        var adminuser = this(data);
+          adminuser.timestamp = new Date();
         if (data._id) {
             this.findOneAndUpdate({
                 _id: data._id
@@ -26,7 +28,7 @@ var models = {
                 }
             });
         } else {
-            notificationtext.save(function (err, created) {
+            adminuser.save(function (err, created) {
                 if (err) {
                     callback(err, null);
                 } else if (created) {
@@ -84,8 +86,8 @@ var models = {
         data.pagesize = parseInt(data.pagesize);
         async.parallel([
                 function (callback) {
-                    NotificationText.count({
-                        title: {
+                    AdminUser.count({
+                        email: {
                             '$regex': check
                         }
                     }).exec(function (err, number) {
@@ -102,8 +104,8 @@ var models = {
                     });
                 },
                 function (callback) {
-                    NotificationText.find({
-                        title: {
+                    AdminUser.find({
+                        email: {
                             '$regex': check
                         }
                     }).skip(data.pagesize * (data.pagenumber - 1)).limit(data.pagesize).exec(function (err, data2) {

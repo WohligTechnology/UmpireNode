@@ -76,6 +76,20 @@ var models = {
             });
         }
     },
+    getOneForBackend: function (data, callback) {
+        this.findOne({
+            "_id": data._id
+        }).exec(function (err, found) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+            } else if (found && Object.keys(found).length > 0) {
+                callback(null, found);
+            } else {
+                callback(null, {});
+            }
+        });
+    },
     deleteData: function (data, callback) {
         this.findOneAndRemove({
             _id: data._id

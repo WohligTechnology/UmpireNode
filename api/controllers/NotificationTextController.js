@@ -1,7 +1,7 @@
 module.exports = {
     save: function (req, res) {
         if (req.body) {
-            NotificationText.saveData(req.body, res.callback);
+            NotificationText.saveData(req.body, res.callback2);
         } else {
             res.json({
                 value: false,
@@ -10,12 +10,10 @@ module.exports = {
         }
     },
     delete: function (req, res) {
-        function callback(err, data) {
-            Global.response(err, data, res);
-        }
+    
         if (req.body) {
           console.log(req.body);
-            NotificationText.deleteData(req.body, callback);
+            NotificationText.deleteData(req.body, res.callback2);
         } else {
             res.json({
                 value: false,
@@ -24,11 +22,9 @@ module.exports = {
         }
     },
     find: function (req, res) {
-        function callback(err, data) {
-            Global.response(err, data, res);
-        }
+
         if (req.body) {
-            NotificationText.getAll(req.body, callback);
+            NotificationText.getAll(req.body, res.callback2);
         } else {
             res.json({
                 value: false,
@@ -37,11 +33,9 @@ module.exports = {
         }
     },
     findOne: function (req, res) {
-        function callback(err, data) {
-            Global.response(err, data, res);
-        }
+
         if (req.body) {
-            NotificationText.getOne(req.body, callback);
+            NotificationText.getOne(req.body, res.callback2);
         } else {
             res.json({
                 value: false,
@@ -52,7 +46,7 @@ module.exports = {
     findLimited: function (req, res) {
         if (req.body) {
             if (req.body.pagenumber && req.body.pagenumber != "" && req.body.pagesize && req.body.pagesize != "") {
-                NotificationText.findLimited(req.body, res.callback);
+                NotificationText.findLimited(req.body, res.callback2);
             } else {
                 res.json({
                     value: false,

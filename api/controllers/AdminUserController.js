@@ -1,7 +1,7 @@
 module.exports = {
     save: function (req, res) {
         if (req.body) {
-            NotificationText.saveData(req.body, res.callback);
+            AdminUser.saveData(req.body, res.callback2);
         } else {
             res.json({
                 value: false,
@@ -10,12 +10,10 @@ module.exports = {
         }
     },
     delete: function (req, res) {
-        function callback(err, data) {
-            Global.response(err, data, res);
-        }
+
         if (req.body) {
           console.log(req.body);
-            NotificationText.deleteData(req.body, callback);
+            AdminUser.deleteData(req.body, res.callback2);
         } else {
             res.json({
                 value: false,
@@ -28,7 +26,7 @@ module.exports = {
             Global.response(err, data, res);
         }
         if (req.body) {
-            NotificationText.getAll(req.body, callback);
+            AdminUser.getAll(req.body, res.callback2);
         } else {
             res.json({
                 value: false,
@@ -37,11 +35,9 @@ module.exports = {
         }
     },
     findOne: function (req, res) {
-        function callback(err, data) {
-            Global.response(err, data, res);
-        }
+
         if (req.body) {
-            NotificationText.getOne(req.body, callback);
+            AdminUser.getOne(req.body, res.callback2);
         } else {
             res.json({
                 value: false,
@@ -50,20 +46,20 @@ module.exports = {
         }
     },
     findLimited: function (req, res) {
-        if (req.body) {
-            if (req.body.pagenumber && req.body.pagenumber != "" && req.body.pagesize && req.body.pagesize != "") {
-                NotificationText.findLimited(req.body, res.callback);
-            } else {
-                res.json({
-                    value: false,
-                    data: "Please provide parameters"
-                });
-            }
-        } else {
-            res.json({
-                value: false,
-                data: "Invalid Request"
-            });
-        }
+      if (req.body) {
+          if (req.body.pagenumber && req.body.pagenumber != "" && req.body.pagesize && req.body.pagesize != "") {
+              AdminUser.findLimited(req.body, res.callback2);
+          } else {
+              res.json({
+                  value: false,
+                  data: "Please provide parameters"
+              });
+          }
+      } else {
+          res.json({
+              value: false,
+              data: "Invalid Request"
+          });
+      }
     },
 };

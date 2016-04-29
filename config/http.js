@@ -87,6 +87,20 @@ module.exports.http = {
 
         }
     };
+
+    res.callback2 = function(err, data) {
+               if (err) {
+                   res.json({
+                       error: err,
+                       value: false
+                   });
+               } else {
+                   res.json({
+                       data: data,
+                       value: true
+                   });
+               }
+           };
     res.validate = function(format) {
 
     };
