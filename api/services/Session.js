@@ -268,7 +268,7 @@ var models = {
         } else if (incrementRun == -1) {
             newruns -= 1;
         }
-
+        var updateVal={};
         if (bat == 1) {
             updateVal.team1Runs = newruns;
         } else {
