@@ -157,7 +157,6 @@ var models = {
                         found.session = sessionData;
                         callback(null, found);
                     }
-
                 });
 
             } else {

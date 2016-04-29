@@ -89,7 +89,7 @@ module.exports = {
       });
     }
     if (req.body) {
-      Match.getOne(req.body, res.callback2);
+      Match.getOne(req.body, callback);
     } else {
       res.json({
         value: false,
@@ -101,7 +101,7 @@ module.exports = {
 
     if (req.body) {
       if (req.body.pagenumber && req.body.pagenumber !== "" && req.body.pagesize && req.body.pagesize !== "") {
-        Match.findLimited(req.body, res.callback2);
+        Match.findLimited(req.body, res.callback);
       } else {
         res.json({
           value: false,

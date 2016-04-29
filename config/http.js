@@ -73,8 +73,8 @@ module.exports.http = {
               res.json({
                   data: data,
                   value: true,
-                  serverTime:Date(),
-                  userid:userdata.userid
+                  serverTime: Date(),
+                  userid: userdata.userid
               });
             }
             else {
