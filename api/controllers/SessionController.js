@@ -1,5 +1,5 @@
 module.exports = {
-    save: function (req, res) {
+    save: function(req, res) {
         function callback(err, data) {
             Global.response(err, data, res);
         }
@@ -12,7 +12,7 @@ module.exports = {
             });
         }
     },
-    delete: function (req, res) {
+    delete: function(req, res) {
         function callback(err, data) {
             Global.response(err, data, res);
         }
@@ -25,7 +25,7 @@ module.exports = {
             });
         }
     },
-    find: function (req, res) {
+    find: function(req, res) {
         function callback(err, data) {
             Global.response(err, data, res);
         }
@@ -38,7 +38,7 @@ module.exports = {
             });
         }
     },
-    findOne: function (req, res) {
+    findOne: function(req, res) {
         function callback(err, data) {
             Global.response(err, data, res);
         }
@@ -51,7 +51,7 @@ module.exports = {
             });
         }
     },
-    findLimited: function (req, res) {
+    findLimited: function(req, res) {
         function callback(err, data) {
             Global.response(err, data, res);
         }
@@ -71,8 +71,8 @@ module.exports = {
             });
         }
     },
-    sessionRuns: function (req, res) {
-      console.log(req.body);
+    sessionRuns: function(req, res) {
+        console.log(req.body);
         if (req.body) {
             Session.sessionRuns(req.body, res.callback);
         } else {
@@ -81,5 +81,61 @@ module.exports = {
                 data: "Invalid Request"
             });
         }
+    },
+    change: function(req, res) {
+        var over = 0;
+        var runs = 0;
+        var bat = 0;
+        var matchid = 0;
+
+        function callback(err, data) {
+            // OVERS
+            bat = data.bat;
+            if (bat == 1) {
+                over = data.team1Overs;
+                runs = data.team1Runs;
+            } else {
+                over = data.team2Overs;
+                runs = data.team2Runs;
+            }
+
+
+            if (req.body.incrementBall !== '' && req.body.incrementBall) {
+                console.log("In IB");
+                Session.incrementBall(req.body.incrementBall, bat, req.body._id, over, res.callback2);
+            }
+
+            // increment runs
+            else if (req.body.incrementRun !== '' && req.body.incrementRun) {
+
+                Session.incrementRun(req.body.incrementRun, bat, req.body._id, runs, res.callback2);
+        }
+        // increment wicket
+        else if (req.body.incrementWicket !== '' && req.body.incrementWicket) {
+            Session.incrementWicket(req.body, res.callback);
+        }
+        // change bat
+        else if (req.body.changeBat !== '' && req.body.changeBat) {
+            Session.changeBat(req.body, res.callback);
+        }
+        // change bat
+        else if (req.body.rate1 !== '' && req.body.rate1 && req.body.rate2 !== '' && req.body.rate2) {
+            Session.changeRate(req.body, res.callback);
+        }
+        // change favourite
+        else if (req.body.changeFavourite !== '' && req.body.changeFavourite) {
+            Session.changeFavourite(req.body, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Request"
+            });
+        }
+
     }
+    if (req.body) {
+        Match.getOneForBackend(req.body, callback);
+    } else {}
+
+},
 };

@@ -181,7 +181,7 @@ var models = {
                         if (err) {
                             console.log(err);
                             callback(err, null);
-                        } else if (number && number != "") {
+                        } else if (number && number !== "") {
                             newreturns.total = number;
                             newreturns.totalpages = Math.ceil(number / data.pagesize);
                             callback(null, newreturns);
