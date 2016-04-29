@@ -58,8 +58,6 @@ module.exports.http = {
   myRequestLogger: function(req, res, next) {
 
     res.callback = function(err, data) {
-      console.log(err);
-      console.log(req.session.user);
         if (err || !req.session.user) {
             res.json({
                 error: err,
