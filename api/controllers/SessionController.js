@@ -56,7 +56,7 @@ module.exports = {
             Global.response(err, data, res);
         }
         if (req.body) {
-            if (req.body.pagenumber && req.body.pagenumber != "" && req.body.pagesize && req.body.pagesize != "") {
+            if (req.body.pagenumber && req.body.pagenumber !== "" && req.body.pagesize && req.body.pagesize !== "") {
                 Session.findLimited(req.body, callback);
             } else {
                 res.json({
@@ -104,43 +104,68 @@ module.exports = {
                 wicket = data.team2Wicket;
             }
 
-
-            if (req.body.incrementBall !== '' && req.body.incrementBall) {
-
-                Session.incrementBall(req.body.incrementBall, bat, req.body._id, over, res.callback2);
-            }
-
-            // increment runs
-            else if (req.body.incrementRun !== '' && req.body.incrementRun) {
-
-                Session.incrementRun(req.body.incrementRun, bat, req.body._id, runs, res.callback2);
-            }
-            // increment wicket
-            else if (req.body.incrementWicket !== '' && req.body.incrementWicket) {
-                Session.incrementWicket(req.body.incrementWicket, bat, req.body._id, wicket, res.callback2);
-            }
-            // change bat
-            else if (req.body.changeBat !== '' && req.body.changeBat) {
-                Session.changeBat(req.body.changeBat, bat, req.body._id, res.callback2);
-            }
-            // change bat
-            else if (req.body.rate1 !== '' && req.body.rate1 && req.body.rate2 !== '' && req.body.rate2) {
-                Session.changeRate(req.body.rate1, req.body.rate2, req.body._id, res.callback2);
-            }
-            // change favourite
-            else if (req.body.changeFavourite !== '' && req.body.changeFavourite) {
-                Session.changeFavourite(req.body.changeFavourite, favourite, req.body._id, res.callback2);
-            } else {
-                res.json({
-                    value: false,
-                    data: "Invalid Request"
+            async.parallel({
+                    incrementBall: function(callback) {
+                        if (req.body.incrementBall !== '' && req.body.incrementBall) {
+                            Session.incrementBall(req.body.incrementBall, bat, req.body._id, over, callback);
+                        } else {
+                            callback(null, {});
+                        }
+                    },
+                    incrementRun: function(callback) {
+                        if (req.body.incrementRun !== '' && req.body.incrementRun) {
+                            Session.incrementRun(req.body.incrementRun, bat, req.body._id, runs, callback);
+                        } else {
+                            callback(null, {});
+                        }
+                    },
+                    incrementWicket: function(callback) {
+                        if (req.body.incrementWicket !== '' && req.body.incrementWicket) {
+                            Session.incrementWicket(req.body.incrementWicket, bat, req.body._id, wicket, callback);
+                        } else {
+                            callback(null, {});
+                        }
+                    },
+                    changeBat: function(callback) {
+                        if (req.body.changeBat !== '' && req.body.changeBat) {
+                            Session.changeBat(req.body.changeBat, bat, req.body._id, callback);
+                        } else {
+                            callback(null, {});
+                        }
+                    },
+                    changeRate: function(callback) {
+                        if (req.body.rate1 !== '' && req.body.rate1 && req.body.rate2 !== '' && req.body.rate2) {
+                            Session.changeRate(req.body.rate1, req.body.rate2, req.body._id, callback);
+                        } else {
+                            callback(null, {});
+                        }
+                    },
+                    changeFavourite: function(callback) {
+                        if (req.body.changeFavourite !== '' && req.body.changeFavourite) {
+                            Session.changeFavourite(req.body.changeFavourite, favourite, req.body._id, callback);
+                        } else {
+                            callback(null, {});
+                        }
+                    }
+                },
+                function(err, data) {
+                  console.log("Locha");
+                    if (!err) {
+                        res.callback2(null,data);
+                    } else {
+                        res.callback2(null,err);
+                    }
                 });
-            }
-
         }
+
+
         if (req.body) {
             Match.getOneForBackend(req.body, callback);
-        } else {}
+        } else {
+            res.json({
+                error: "inValid Format"
+            });
+        }
 
     },
 
@@ -148,7 +173,7 @@ module.exports = {
     // CREATE SESSION
 
     createSession: function(req, res) {
-      console.log("In session");
+        console.log("In session");
         var inning = 0;
         var runs = 0;
         var bat = 0;

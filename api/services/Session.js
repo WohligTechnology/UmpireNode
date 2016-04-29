@@ -260,12 +260,7 @@ var models = {
     // INCREMENT runs
 
     incrementRun: function(incrementRun, bat, matchid, runs, callback) {
-        newruns = runs;
-        if (incrementRun == 1) {
-            newruns += 1;
-        } else if (incrementRun == -1) {
-            newruns -= 1;
-        }
+        newruns = runs + incrementRun;
         var updateVal = {};
         if (bat == 1) {
             updateVal.team1Runs = newruns;
@@ -278,7 +273,6 @@ var models = {
             $set: updateVal
         }).exec(function(err, updated) {
             if (err) {
-                console.log(err);
                 callback(err, null);
             } else if (updated) {
                 callback(null, updated);
