@@ -12,16 +12,16 @@ module.exports = {
       });
     }
   },
-  findOneForBackend: function (req, res) {
+  findOneForBackend: function(req, res) {
 
-      if (req.body) {
-          Match.getOneForBackend(req.body, res.callback2);
-      } else {
-          res.json({
-              value: false,
-              data: "Invalid Request"
-          });
-      }
+    if (req.body) {
+      Match.getOneForBackend(req.body, res.callback2);
+    } else {
+      res.json({
+        value: false,
+        data: "Invalid Request"
+      });
+    }
   },
   delete: function(req, res) {
     function callback(err, data) {
@@ -55,25 +55,23 @@ module.exports = {
         res.json({
           error: err,
           value: false,
-          userid:req.session.userid
+          userid: req.session.userid
         });
       } else {
         User.findOne({
-            "_id": req.session.user._id
-        }).exec(function(err,userdata) {
-          if(!err)
-          {
+          "_id": req.session.user._id
+        }).exec(function(err, userdata) {
+          if (!err) {
             res.json({
-                data: data,
-                value: true,
-                serverTime:Date(),
-                userid:userdata.userid
+              data: data,
+              value: true,
+              serverTime: Date(),
+              userid: userdata.userid
             });
-          }
-          else {
+          } else {
             res.json({
-                error: err,
-                value: false
+              error: err,
+              value: false
             });
           }
         });
@@ -123,27 +121,24 @@ module.exports = {
 
       } else {
         User.findOne({
-            "_id": req.session.user._id
-        }).exec(function(err,userdata) {
-          if(!err )
-          {
+          "_id": req.session.user._id
+        }).exec(function(err, userdata) {
+          if (!err) {
             sails.sockets.broadcast(req.body._id, {
               data: data,
               value: true,
               serverTime: Date(),
-              userid:userdata.userid
+              userid: userdata.userid
             });
 
-          }
-          else {
+          } else {
             res.json({
-                error: err,
-                value: false,
-                serverTime:Date(),
+              error: err,
+              value: false,
+              serverTime: Date(),
             });
           }
         });
-
         console.log("SOCKET CALLED");
       }
     };
@@ -159,14 +154,12 @@ module.exports = {
         Match.change(data3, callbackAA);
       }, function(callbackAA) {
         var data2 = {};
-        if(req.body.sesRun)
-        {
+        if (req.body.sesRun) {
           data2._id = req.body._id;
           data2.run = req.body.sesRun;
-          Session.sessionRuns(data2,callbackAA);
-        }
-        else {
-          callbackAA(null,{});
+          Session.sessionRuns(data2, callbackAA);
+        } else {
+          callbackAA(null, {});
         }
 
       }], function(err, data) {
@@ -177,9 +170,6 @@ module.exports = {
         }
 
       });
-
-
-
     } else {
       res.json({
         value: false,
