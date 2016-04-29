@@ -170,6 +170,7 @@ module.exports = {
                     console.log("Locha");
                     if (!err) {
                         res.callback2(null, data);
+                        getMatchDetails();
                     } else {
                         res.callback2(null, err);
                     }
