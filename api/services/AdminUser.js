@@ -5,6 +5,7 @@ var schema = new Schema({
     email: String,
     password:String,
     status:Boolean,
+    accesslevel:String,
     timestamp: Date
 });
 
