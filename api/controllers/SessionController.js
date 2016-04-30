@@ -158,7 +158,7 @@ module.exports = {
 
                     sessionRuns: function(callback) {
                         if (req.body.run !== '' && req.body.run) {
-                            Session.sessionRuns(req.body, res.callback2);
+                            Session.sessionRuns(req.body, callback);
                         } else {
                             callback(null, {});
                         }
