@@ -212,13 +212,10 @@ var models = {
                             callback(err, null);
                         } else if (data2 && data2.length > 0) {
                             newreturns.data = data2;
-                            //                            console.log(newreturns.data);
                             for (var j = 0; j < newreturns.data; j++) {
                                 console.log(j);
                                 console.log("in for");
                             }
-                            //                            data2.team1 = data2.team1.name;
-                            //                            data2.team2 = data2.team2.name;
                             callback(null, newreturns);
                         } else {
                             callback(null, newreturns);
