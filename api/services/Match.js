@@ -26,7 +26,7 @@ var schema = new Schema({
     firstBat: Number,
     team1score: String,
     team2score: String,
-    status: String,
+    status: Boolean,
     newtarget: String,
     newOvers: Number,
     startTime: Date,

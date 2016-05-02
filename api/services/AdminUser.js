@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var schema = new Schema({
     email: String,
+    name:String,
     password:String,
     status:Boolean,
     accesslevel:String,
