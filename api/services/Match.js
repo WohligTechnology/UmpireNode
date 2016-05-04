@@ -55,7 +55,7 @@ var models = {
                 _id: data._id
             }, data).exec(function (err, updated) {
                 if (err) {
-                    console.log(err);
+
                     callback(err, null);
                 } else if (updated) {
                     callback(null, updated);
@@ -79,9 +79,20 @@ var models = {
     getOneForBackend: function (data, callback) {
         this.findOne({
             "_id": data._id
-        }).exec(function (err, found) {
+        }).populate([{
+            path: "team1",
+            select: {
+                _id: 1,
+                name: 1
+            }
+        }]).populate([{
+            path: "team2",
+            select: {
+                _id: 1,
+                name: 1
+            }
+        }]).exec(function (err, found) {
             if (err) {
-                console.log(err);
                 callback(err, null);
             } else if (found && Object.keys(found).length > 0) {
                 callback(null, found);
@@ -110,7 +121,7 @@ var models = {
               _id: data._id
           }, {$set:data}).exec(function (err, updated) {
               if (err) {
-                  console.log(err);
+                
                   callback(err, null);
               } else if (updated) {
                   callback(null, updated);
