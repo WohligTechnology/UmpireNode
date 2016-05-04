@@ -103,10 +103,6 @@ module.exports = {
         var getMatchDetails = function(err, data) {
             Match.getOne(req.body, socketCallback);
         };
-
-
-
-
         function callback(err, data) {
             // OVERS
             bat = data.bat;
@@ -121,7 +117,6 @@ module.exports = {
                 runs = data.team2Runs;
                 wicket = data.team2Wicket;
             }
-
             async.parallel({
                     incrementBall: function(callback) {
                         if (req.body.incrementBall !== '' && req.body.incrementBall) {
@@ -167,7 +162,6 @@ module.exports = {
                     }
                 },
                 function(err, data) {
-                    console.log("Locha");
                     if (!err) {
                         res.callback2(null, data);
                         getMatchDetails();
@@ -176,8 +170,6 @@ module.exports = {
                     }
                 });
         }
-
-
         if (req.body) {
             Match.getOneForBackend(req.body, callback);
         } else {
@@ -185,10 +177,7 @@ module.exports = {
                 error: "inValid Format"
             });
         }
-
     },
-
-
     // CREATE SESSION
 
     createSession: function(req, res) {
