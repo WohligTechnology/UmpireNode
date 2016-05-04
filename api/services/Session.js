@@ -365,10 +365,9 @@ var models = {
 
     },
 
-    // CHANEG BAT
+    // CHANEG Favourite
 
     changeFavourite: function(changeFavourite, favourite, matchid, callback) {
-
         var newfavourite = favourite;
         if (changeFavourite === true && favourite == 1) {
             newfavourite = 2;
@@ -385,7 +384,6 @@ var models = {
             }
         }).exec(function(err, updated) {
             if (err) {
-                console.log(err);
                 callback(err, null);
             } else if (updated) {
                 callback(null, updated);
@@ -411,7 +409,8 @@ var models = {
                 console.log(err);
                 callback(err, null);
             } else if (updated) {
-              console.log("updated");console.log(updated);
+                console.log("updated");
+                console.log(updated);
                 callback(null, updated);
             } else {
                 var Session2 = new Session({

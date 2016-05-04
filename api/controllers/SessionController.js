@@ -71,17 +71,17 @@ module.exports = {
             });
         }
     },
-    sessionRuns: function(req, res) {
-        console.log(req.body);
-        if (req.body) {
-            Session.sessionRuns(req.body, res.callback);
-        } else {
-            res.json({
-                value: false,
-                data: "Invalid Request"
-            });
-        }
-    },
+    // sessionRuns: function(req, res) {
+    //     console.log(req.body);
+    //     if (req.body) {
+    //         Session.sessionRuns(req.body, res.callback);
+    //     } else {
+    //         res.json({
+    //             value: false,
+    //             data: "Invalid Request"
+    //         });
+    //     }
+    // },
     change: function(req, res) {
         var over = 0;
         var runs = 0;
@@ -103,11 +103,15 @@ module.exports = {
         var getMatchDetails = function(err, data) {
             Match.getOne(req.body, socketCallback);
         };
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
         function callback(err, data) {
             // OVERS
             bat = data.bat;
             favourite = data.favorite;
-            console.log(data);
+            // console.log(data);
             if (bat == 1) {
                 over = data.team1Overs;
                 runs = data.team1Runs;
@@ -153,13 +157,15 @@ module.exports = {
                             callback(null, {});
                         }
                     },
-                    changeFavourite: function(callback) {
-                        if (req.body.changeFavourite !== '' && req.body.changeFavourite) {
-                            Session.changeFavourite(req.body.changeFavourite, favourite, req.body._id, callback);
+
+                    sessionRuns: function(callback) {
+                        if (req.body.run !== '' && req.body.run) {
+                            Session.sessionRuns(req.body, callback);
                         } else {
                             callback(null, {});
                         }
-                    }
+                    },
+
                 },
                 function(err, data) {
                     if (!err) {
@@ -223,6 +229,23 @@ module.exports = {
             res.json({
                 value: false,
                 data: "Invalid Request"
+            });
+        }
+    },
+    // CHANGE FAVOURITE
+
+    changeFavourite: function(req, res) {
+        function callback(err, data) {
+            favourite = data.favorite;
+            if (req.body.changeFavourite !== '' && req.body.changeFavourite) {
+                Session.changeFavourite(req.body.changeFavourite, favourite, req.body._id, res.callback2);
+            }
+        }
+        if (req.body) {
+            Match.getOneForBackend(req.body, callback);
+        } else {
+            res.json({
+                error: "inValid Format"
             });
         }
     },
