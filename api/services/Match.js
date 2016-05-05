@@ -12,36 +12,36 @@ var schema = new Schema({
         ref: 'Team',
         index: true
     },
-    venue: String,
-    overs: Number,
-    link: String,
-    result: String,
+    venue: { type: { type: String, default: 0 }, default: 0 },
+    overs: { type: Number, default: 0 },
+    link: { type: String, default: 0 },
+    result: { type: String, default: 0 },
     tournament: {
         type: Schema.Types.ObjectId,
         ref: 'Tournament',
         index: true
     },
-    comment: String,
-    toss: String,
-    firstBat: Number,
-    team1score: String,
-    team2score: String,
-    status: Boolean,
-    newtarget: String,
-    newOvers: Number,
-    startTime: Date,
-    bat: Number,
-    suspended: Boolean,
-    cupName: String,
-    team1Runs: Number,
-    team1Wicket: Number,
-    team1Overs: Number,
-    team2Runs: Number,
-    team2Overs: Number,
-    team2Wicket: Number,
-    favorite: Number,
-    rate1: Number,
-    rate2: Number
+    comment: { type: String, default: 0 },
+    toss: { type: String, default: 0 },
+    firstBat: { type: Number, default: 0 },
+    team1score: { type: String, default: 0 },
+    team2score: { type: String, default: 0 },
+    status: { type: Boolean, default: false },
+    newtarget: { type: String, default: 0 },
+    newOvers: { type: Number, default: 0 },
+    startTime: { type: Date, default: Date.now },
+    bat: { type: Number, default: 0 },
+    suspended: { type: Boolean, default: false },
+    cupName: { type: String, default: 0 },
+    team1Runs: { type: Number, default: 0 },
+    team1Wicket: { type: Number, default: 0 },
+    team1Overs: { type: Number, default: 0 },
+    team2Runs: { type: Number, default: 0 },
+    team2Overs: { type: Number, default: 0 },
+    team2Wicket: { type: Number, default: 0 },
+    favorite: { type: Number, default: 1 },
+    rate1: { type: Number, default: 1 },
+    rate2: { type: Number, default: 1 }
 
 });
 
@@ -121,7 +121,7 @@ var models = {
               _id: data._id
           }, {$set:data}).exec(function (err, updated) {
               if (err) {
-                
+
                   callback(err, null);
               } else if (updated) {
                   callback(null, updated);
@@ -149,13 +149,13 @@ var models = {
         }).populate([{
             path: "team1",
             select: {
-                _id: 0,
+                _id: 1,
                 name: 1
             }
         }]).populate([{
             path: "team2",
             select: {
-                _id: 0,
+                _id: 1,
                 name: 1
             }
         }]).lean().exec(function (err, found) {
