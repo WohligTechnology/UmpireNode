@@ -6,15 +6,15 @@
  */
 
 var mongoose = require('mongoose');
-var Grid = require('gridfs-stream');
-var fs = require("fs");
-var lwip = require("lwip");
-var process = require('child_process');
-var lodash = require('lodash');
-var MaxImageSize = 1200;
+// var Grid = require('gridfs-stream');
+// var fs = require("fs");
+// var lwip = require("lwip");
+// var process = require('child_process');
+// var lodash = require('lodash');
+// var MaxImageSize = 1200;
 
-var gfs = Grid(mongoose.connections[0].db, mongoose);
-gfs.mongo = mongoose.mongo;
+// var gfs = Grid(mongoose.connections[0].db, mongoose);
+// gfs.mongo = mongoose.mongo;
 
 var Schema = mongoose.Schema;
 var schema = new Schema({

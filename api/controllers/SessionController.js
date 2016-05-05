@@ -103,10 +103,7 @@ module.exports = {
         var getMatchDetails = function(err, data) {
             Match.getOne(req.body, socketCallback);
         };
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/master
         function callback(err, data) {
             // OVERS
             bat = data.bat;
