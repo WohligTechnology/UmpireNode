@@ -14,8 +14,32 @@ module.exports = {
   },
   findOneForBackend: function(req, res) {
 
+    var callback = function(err, data) {
+      if (!err) {
+        res.json({
+          data: data,
+          value: true,
+        });
+      } else {
+        res.json({
+          error: err,
+          value: false
+        });
+      }
+    };
+    if (!req.isSocket) {
+      return res.badRequest();
+    } else {
+      sails.sockets.join(req, req.body._id, function(err) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("user Added to room " + req.body._id);
+        }
+      });
+    }
     if (req.body) {
-      Match.getOneForBackend(req.body, res.callback2);
+      Match.getOne(req.body, callback);
     } else {
       res.json({
         value: false,
@@ -102,6 +126,24 @@ module.exports = {
     if (req.body) {
       if (req.body.pagenumber && req.body.pagenumber !== "" && req.body.pagesize && req.body.pagesize !== "") {
         Match.findLimited(req.body, res.callback);
+      } else {
+        res.json({
+          value: false,
+          data: "Please provide parameters"
+        });
+      }
+    } else {
+      res.json({
+        value: false,
+        data: "Invalid Request"
+      });
+    }
+  },
+  findLimitedForBackend: function(req, res) {
+
+    if (req.body) {
+      if (req.body.pagenumber && req.body.pagenumber !== "" && req.body.pagesize && req.body.pagesize !== "") {
+        Match.findLimited(req.body, res.callback2);
       } else {
         res.json({
           value: false,
