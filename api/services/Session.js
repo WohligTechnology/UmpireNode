@@ -45,11 +45,10 @@ var models = {
         }
     },
     sessionRuns: function(data, callback) {
-        console.log("In start");
+
         var currentover = 0;
+        var inning = 0;
         if (data.run) {
-            console.log(data);
-            console.log(" server data ends ");
             // check current over
             Match.findOne({
                 "_id": data._id
@@ -57,24 +56,26 @@ var models = {
                 if (err) {
                     callback(err, null);
                 } else if (found) {
-                    console.log(found);
                     //find one and update it
                     if (found.bat == 1) {
                         currentover = found.team1Overs;
-                        console.log("Current : 11.11");
                     } else {
                         currentover = found.team2Overs;
-                        console.log("Current : 20");
+                    }
+                    if (found.firstBat == found.bat) {
+                        inning = 1;
+                    } else {
+                        inning = 2;
                     }
                     Session.findOne({
                         match: data._id,
                         over: {
                             $gt: currentover
-                        }
+                        },
+                        inning: inning
                     }).sort({
                         over: 1
                     }).exec(function(err, gotId) {
-                        console.log(gotId);
                         if (err) {
                             console.log(err);
                             callback(err, null);
