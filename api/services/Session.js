@@ -122,7 +122,6 @@ var models = {
         });
     },
     sessionRuns2: function(data, callback) {
-        console.log(data);
         Session.findOneAndUpdate({
             _id: data._id
         }, {
@@ -130,8 +129,6 @@ var models = {
                 run: data.run
             }
         }).exec(function(err, updated) {
-          console.log(err);
-          console.log(updated);
             if (err) {
                 console.log(err);
                 callback(err, null);
@@ -326,7 +323,6 @@ var models = {
             $set: updateVal
         }).exec(function(err, updated) {
             if (err) {
-                console.log(err);
                 callback(err, null);
             } else if (updated) {
                 callback(null, updated);
@@ -353,7 +349,6 @@ var models = {
             $set: updateVal
         }).exec(function(err, updated) {
             if (err) {
-                console.log(err);
                 callback(err, null);
             } else if (updated) {
                 callback(null, updated);
@@ -365,11 +360,12 @@ var models = {
     },
     // CHANEG BAT
 
-    changeSuspended: function(changeSuspended, suspended, matchid, callback) {
+    changeSuspended: function( suspended, matchid, callback) {
+    
         var newSuspended = false;
-        if (changeSuspended === '1' && suspended === true) {
+        if (suspended === true) {
             newSuspended = false;
-        } else if (changeSuspended === '1' && suspended === false) {
+        } else if (suspended === false) {
             newSuspended = true;
         }
         var updateVal = {};
@@ -380,7 +376,6 @@ var models = {
             $set: updateVal
         }).exec(function(err, updated) {
             if (err) {
-                console.log(err);
                 callback(err, null);
             } else if (updated) {
                 callback(null, updated);
@@ -403,7 +398,6 @@ var models = {
             }
         }).exec(function(err, updated) {
             if (err) {
-                console.log(err);
                 callback(err, null);
             } else if (updated) {
                 callback(null, updated);
@@ -425,7 +419,6 @@ var models = {
             }
         }).exec(function(err, updated) {
             if (err) {
-                console.log(err);
                 callback(err, null);
             } else if (updated) {
                 callback(null, updated);
@@ -447,7 +440,6 @@ var models = {
             }
         }).exec(function(err, updated) {
             if (err) {
-                console.log(err);
                 callback(err, null);
             } else if (updated) {
                 callback(null, updated);
@@ -467,7 +459,6 @@ var models = {
                 "comment": changeComment
             }
         }).exec(function(err, updated) {
-            console.log(updated);
             if (err) {
                 console.log(err);
                 callback(err, null);
@@ -521,11 +512,8 @@ var models = {
 
         }).exec(function(err, updated) {
             if (err) {
-                console.log(err);
                 callback(err, null);
             } else if (updated) {
-                console.log("updated");
-                console.log(updated);
                 callback(null, updated);
             } else {
                 var Session2 = new Session({

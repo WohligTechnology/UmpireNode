@@ -176,8 +176,8 @@ module.exports = {
                         }
                     },
                     changeSuspended: function(callback) {
-                        if (req.body.changeSuspended !== '' && req.body.changeSuspended) {
-                            Session.changeSuspended(req.body.changeSuspended, suspended, req.body._id, callback);
+                        if (req.body._id !== '' && req.body._id) {
+                            Session.changeSuspended( suspended, req.body._id, callback);
                         } else {
                             callback(null, {});
                         }

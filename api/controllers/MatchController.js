@@ -158,35 +158,45 @@ module.exports = {
     }
   },
   change: function(req, res) {
-    var callback2 = function(err, data) {
-      if (err) {
-
-      } else {
-        User.findOne({
-          "_id": req.session.user._id
-        }).exec(function(err, userdata) {
-          if (!err) {
+    var socketCallback = function(err, data) {
+        if (err) {} else {
             sails.sockets.broadcast(req.body._id, {
-              data: data,
-              value: true,
-              serverTime: Date(),
-              userid: userdata.userid
+                data: data,
+                value: true,
+                serverTime: Date()
             });
-
-          } else {
-            res.json({
-              error: err,
-              value: false,
-              serverTime: Date(),
-            });
-          }
-        });
-        console.log("SOCKET CALLED");
-      }
+            console.log("SOCKET CALLED");
+        }
     };
+    // var callback2 = function(err, data) {
+    //   if (err) {
+    //
+    //   } else {
+    //     User.findOne({
+    //       "_id": req.session.user._id
+    //     }).exec(function(err, userdata) {
+    //       if (!err) {
+    //         sails.sockets.broadcast(req.body._id, {
+    //           data: data,
+    //           value: true,
+    //           serverTime: Date(),
+    //           userid: userdata.userid
+    //         });
+    //
+    //       } else {
+    //         res.json({
+    //           error: err,
+    //           value: false,
+    //           serverTime: Date(),
+    //         });
+    //       }
+    //     });
+    //     console.log("SOCKET CALLED");
+    //   }
+    // };
     var callback = function(err, data) {
       res.callback(err, data);
-      Match.getOne(req.body, callback2);
+      Match.getOne(req.body, socketCallback);
     };
     if (req.body && req.body._id) {
 
