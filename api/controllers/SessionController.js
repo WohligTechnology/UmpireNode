@@ -296,29 +296,38 @@ module.exports = {
             });
         }
     },
-    // CHANGE DLRUNS
-    //
-    // changeNewOvers: function(req, res) {
-    //     var socketCallback = function(err, data) {
-    //         if (err) {
-    //
-    //         } else {
-    //             sails.sockets.broadcast(req.body._id, {
-    //                 data: data,
-    //                 value: true,
-    //                 serverTime: Date()
-    //             });
-    //             console.log("SOCKET CALLED");
-    //         }
-    //     };
-    //     if (req.body.changeNewOvers !== '' && req.body.changeNewOvers) {
-    //         Session.changeNewOvers(req.body.changeNewOvers, req.body._id, res.callback2);
-    //     } else {
-    //         res.json({
-    //             error: "inValid Format"
-    //         });
-    //     }
-    // },
+    // CHANGE SUSPENDED
+
+    changeSuspended: function(req, res) {
+      var suspended = false;
+        var socketCallback = function(err, data) {
+            if (err) {
+
+            } else {
+                sails.sockets.broadcast(req.body._id, {
+                    data: data,
+                    value: true,
+                    serverTime: Date()
+                });
+                console.log("SOCKET CALLED");
+                res.json({data:"suspended Changes",value:true});
+            }
+        };
+        var getMatchDetails = function(err, data) {
+            Match.getOne(req.body, socketCallback);
+        };
+
+            Match.getOne(req.body, function(err,data) {
+              if (req.body._id !== '' && req.body._id) {
+                  Session.changeSuspended( data.suspended,req.body._id, getMatchDetails);
+              } else {
+                  res.json({
+                      error: "inValid Format"
+                  });
+              }
+            });
+
+    },
     // CHANGE COMMENT
 
     changeComment: function(req, res) {

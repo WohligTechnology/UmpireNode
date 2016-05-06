@@ -1,10 +1,23 @@
 module.exports = {
   save: function(req, res) {
-    function callback(err, data) {
-      Global.response(err, data, res);
-    }
+    var socketCallback = function(err, data) {
+        if (err) {
+
+        } else {
+            sails.sockets.broadcast(req.body._id, {
+                data: data,
+                value: true,
+                serverTime: Date()
+            });
+            console.log("SOCKET CALLED");
+              res.json({data:"Match saved",value:true});
+        }
+    };
+    var getMatchDetails = function(err, data) {
+        Match.getOne(req.body, socketCallback);
+    };
     if (req.body) {
-      Match.saveData(req.body, res.callback2);
+      Match.saveData(req.body,getMatchDetails);
     } else {
       res.json({
         value: false,
