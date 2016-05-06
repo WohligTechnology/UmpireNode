@@ -347,7 +347,7 @@ module.exports = {
             Match.getOne(req.body, socketCallback);
         };
 
-        if (req.body.changeComment !== '' && req.body.changeComment) {
+        if (req.body.changeComment == '' && req.body.changeComment) {
             Session.changeComment(req.body.changeComment, req.body._id, getMatchDetails);
             res.json({
                 value: true,
