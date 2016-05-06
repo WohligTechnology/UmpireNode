@@ -30,7 +30,7 @@ var schema = new Schema({
     newtarget: { type: String, default: 0 },
     newOvers: { type: Number, default: 0 },
     startTime: { type: Date, default: Date.now },
-    bat: { type: Number, default: 0 },
+    bat: { type: Number, default: 1 },
     suspended: { type: Boolean, default: false },
     cupName: { type: String, default: 0 },
     team1Runs: { type: Number, default: 0 },
