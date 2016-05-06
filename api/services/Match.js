@@ -23,7 +23,7 @@ var schema = new Schema({
     },
     comment: { type: String, default: 0 },
     toss: { type: String, default: 0 },
-    firstBat: { type: Number, default: 0 },
+    firstBat: { type: Number, default: 1 },
     team1score: { type: String, default: 0 },
     team2score: { type: String, default: 0 },
     status: { type: Boolean, default: false },
@@ -41,8 +41,8 @@ var schema = new Schema({
     team2Wicket: { type: Number, default: 0 },
     favorite: { type: Number, default: 1 },
     rate1: { type: Number, default: 1 },
-    rate2: { type: Number, default: 1 }
-
+    rate2: { type: Number, default: 1 },
+    dlRuns: { type: Number, default: 0 }
 });
 
 module.exports = mongoose.model('Match', schema);

@@ -88,6 +88,7 @@ module.exports = {
         var bat = 0;
         var matchid = 0;
         var favourite = 0;
+        var suspended = false;
         var socketCallback = function(err, data) {
             if (err) {
 
@@ -108,6 +109,7 @@ module.exports = {
             // OVERS
             bat = data.bat;
             favourite = data.favorite;
+            suspended = data.suspended;
             // console.log(data);
             if (bat == 1) {
                 over = data.team1Overs;
@@ -143,6 +145,13 @@ module.exports = {
                     changeBat: function(callback) {
                         if (req.body.changeBat !== '' && req.body.changeBat) {
                             Session.changeBat(req.body.changeBat, bat, req.body._id, callback);
+                        } else {
+                            callback(null, {});
+                        }
+                    },
+                    changeSuspended: function(callback) {
+                        if (req.body.changeSuspended !== '' && req.body.changeSuspended) {
+                            Session.changeSuspended(req.body.changeSuspended,suspended,req.body._id, callback);
                         } else {
                             callback(null, {});
                         }
@@ -240,6 +249,17 @@ module.exports = {
         }
         if (req.body) {
             Match.getOneForBackend(req.body, callback);
+        } else {
+            res.json({
+                error: "inValid Format"
+            });
+        }
+    },
+    // CHANGE DLRUNS
+
+    changeDlruns: function(req, res) {
+        if (req.body.changeDlruns !== '' && req.body.changeDlruns) {
+          Session.changeDlruns(req.body.changeDlruns, req.body._id, res.callback2);
         } else {
             res.json({
                 error: "inValid Format"

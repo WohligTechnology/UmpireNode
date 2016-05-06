@@ -342,6 +342,33 @@ var models = {
         });
 
     },
+    // CHANEG BAT
+
+    changeSuspended: function(changeSuspended, suspended, matchid, callback) {
+        var newSuspended = false;
+        if (changeSuspended === '1' && suspended === true) {
+            newSuspended = false;
+        } else if (changeSuspended === '1' && suspended === false) {
+            newSuspended = true;
+        }
+        var updateVal = {};
+        updateVal.suspended = newSuspended;
+        Match.findOneAndUpdate({
+            _id: matchid
+        }, {
+            $set: updateVal
+        }).exec(function(err, updated) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+            } else if (updated) {
+                callback(null, updated);
+            } else {
+                callback(null, {});
+            }
+        });
+
+    },
     // CHANEG RATE
 
     changeRate: function(rate1, rate2, matchid, callback) {
@@ -354,6 +381,28 @@ var models = {
                 "rate2": rate2
             }
         }).exec(function(err, updated) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+            } else if (updated) {
+                callback(null, updated);
+            } else {
+                callback(null, {});
+            }
+        });
+
+    },
+    // CHANEG DLRUNS
+
+    changeDlruns: function(changeDlruns, matchid, callback) {
+        Match.findOneAndUpdate({
+            _id: matchid
+        }, {
+            $set: {
+                "dlRuns": changeDlruns
+            }
+        }).exec(function(err, updated) {
+            console.log(updated);
             if (err) {
                 console.log(err);
                 callback(err, null);
