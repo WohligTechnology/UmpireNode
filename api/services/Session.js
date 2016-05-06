@@ -437,12 +437,13 @@ var models = {
     },
     // CHANEG DLRUNS
 
-    changeDlruns: function(changeDlruns, matchid, callback) {
+    changeDlruns: function(changeDlruns,changeNewOvers, matchid, callback) {
         Match.findOneAndUpdate({
             _id: matchid
         }, {
             $set: {
-                "dlRuns": changeDlruns
+                "dlRuns": changeDlruns,
+                "newOvers": changeNewOvers
             }
         }).exec(function(err, updated) {
             if (err) {
