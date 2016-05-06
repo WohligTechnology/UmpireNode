@@ -175,13 +175,6 @@ module.exports = {
                             callback(null, {});
                         }
                     },
-                    changeSuspended: function(callback) {
-                        if (req.body._id !== '' && req.body._id) {
-                            Session.changeSuspended( suspended, req.body._id, callback);
-                        } else {
-                            callback(null, {});
-                        }
-                    },
                     changeRate: function(callback) {
                         if (req.body.rate1 !== '' && req.body.rate1 && req.body.rate2 !== '' && req.body.rate2) {
                             Session.changeRate(req.body.rate1, req.body.rate2, req.body._id, callback);
