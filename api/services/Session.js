@@ -121,6 +121,27 @@ var models = {
             }
         });
     },
+    sessionRuns2: function(data, callback) {
+        console.log(data);
+        Session.findOneAndUpdate({
+            _id: data._id
+        }, {
+            $set: {
+                run: data.run
+            }
+        }).exec(function(err, updated) {
+          console.log(err);
+          console.log(updated);
+            if (err) {
+                console.log(err);
+                callback(err, null);
+            } else if (updated) {
+                callback(null, updated);
+            } else {
+                callback(null, {});
+            }
+        });
+    },
     getAll: function(data, callback) {
         this.find({}).exec(function(err, found) {
             if (err) {
@@ -392,6 +413,28 @@ var models = {
         });
 
     },
+    // CHANEG NEW OVERS
+
+    changeNewOvers: function(changeNewOvers, matchid, callback) {
+
+        Match.findOneAndUpdate({
+            _id: matchid
+        }, {
+            $set: {
+                "newOvers": changeNewOvers
+            }
+        }).exec(function(err, updated) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+            } else if (updated) {
+                callback(null, updated);
+            } else {
+                callback(null, {});
+            }
+        });
+
+    },
     // CHANEG DLRUNS
 
     changeDlruns: function(changeDlruns, matchid, callback) {
@@ -400,6 +443,27 @@ var models = {
         }, {
             $set: {
                 "dlRuns": changeDlruns
+            }
+        }).exec(function(err, updated) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+            } else if (updated) {
+                callback(null, updated);
+            } else {
+                callback(null, {});
+            }
+        });
+
+    },
+    // CHANEG COMMENT
+
+    changeComment: function(changeComment, matchid, callback) {
+        Match.findOneAndUpdate({
+            _id: matchid
+        }, {
+            $set: {
+                "comment": changeComment
             }
         }).exec(function(err, updated) {
             console.log(updated);

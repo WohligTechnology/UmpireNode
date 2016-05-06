@@ -71,17 +71,32 @@ module.exports = {
             });
         }
     },
-    // sessionRuns: function(req, res) {
-    //     console.log(req.body);
-    //     if (req.body) {
-    //         Session.sessionRuns(req.body, res.callback);
-    //     } else {
-    //         res.json({
-    //             value: false,
-    //             data: "Invalid Request"
-    //         });
-    //     }
-    // },
+    sessionRuns2: function(req, res) {
+        var socketCallback = function(err, data) {
+            if (err) {
+
+            } else {
+                sails.sockets.broadcast(req.body._id, {
+                    data: data,
+                    value: true,
+                    serverTime: Date()
+                });
+                console.log("SOCKET CALLED");
+            }
+        };
+        if (req.body) {
+            Session.sessionRuns2(req.body, socketCallback);
+            res.json({
+                value: true,
+                data: "Got data"
+            });
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Request"
+            });
+        }
+    },
     change: function(req, res) {
         var over = 0;
         var runs = 0;
@@ -121,6 +136,14 @@ module.exports = {
                 wicket = data.team2Wicket;
             }
             async.parallel({
+
+                    sessionRuns: function(callback) {
+                        if (req.body.run !== '' && req.body.run) {
+                            Session.sessionRuns(req.body, callback);
+                        } else {
+                            callback(null, {});
+                        }
+                    },
                     incrementBall: function(callback) {
                         if (req.body.incrementBall !== '' && req.body.incrementBall) {
                             Session.incrementBall(req.body.incrementBall, bat, req.body._id, over, callback);
@@ -151,7 +174,7 @@ module.exports = {
                     },
                     changeSuspended: function(callback) {
                         if (req.body.changeSuspended !== '' && req.body.changeSuspended) {
-                            Session.changeSuspended(req.body.changeSuspended,suspended,req.body._id, callback);
+                            Session.changeSuspended(req.body.changeSuspended, suspended, req.body._id, callback);
                         } else {
                             callback(null, {});
                         }
@@ -164,13 +187,7 @@ module.exports = {
                         }
                     },
 
-                    sessionRuns: function(callback) {
-                        if (req.body.run !== '' && req.body.run) {
-                            Session.sessionRuns(req.body, callback);
-                        } else {
-                            callback(null, {});
-                        }
-                    },
+
 
                 },
                 function(err, data) {
@@ -258,8 +275,72 @@ module.exports = {
     // CHANGE DLRUNS
 
     changeDlruns: function(req, res) {
+        var socketCallback = function(err, data) {
+            if (err) {} else {
+                sails.sockets.broadcast(req.body._id, {
+                    data: data,
+                    value: true,
+                    serverTime: Date()
+                });
+                console.log("SOCKET CALLED");
+            }
+        };
         if (req.body.changeDlruns !== '' && req.body.changeDlruns) {
-          Session.changeDlruns(req.body.changeDlruns, req.body._id, res.callback2);
+            Session.changeDlruns(req.body.changeDlruns, req.body._id, socketCallback);
+            res.json({
+                value: true,
+                data: "Got runs"
+            });
+        } else {
+            res.json({
+                error: "inValid Format"
+            });
+        }
+    },
+    // CHANGE DLRUNS
+
+    changeNewOvers: function(req, res) {
+        var socketCallback = function(err, data) {
+            if (err) {
+
+            } else {
+                sails.sockets.broadcast(req.body._id, {
+                    data: data,
+                    value: true,
+                    serverTime: Date()
+                });
+                console.log("SOCKET CALLED");
+            }
+        };
+        if (req.body.changeNewOvers !== '' && req.body.changeNewOvers) {
+            Session.changeNewOvers(req.body.changeNewOvers, req.body._id, res.callback2);
+        } else {
+            res.json({
+                error: "inValid Format"
+            });
+        }
+    },
+    // CHANGE COMMENT
+
+    changeComment: function(req, res) {
+        var socketCallback = function(err, data) {
+            if (err) {
+
+            } else {
+                sails.sockets.broadcast(req.body._id, {
+                    data: data,
+                    value: true,
+                    serverTime: Date()
+                });
+                console.log("SOCKET CALLED");
+            }
+        };
+        if (req.body.changeComment !== '' && req.body.changeComment) {
+            Session.changeComment(req.body.changeComment, req.body._id, socketCallback);
+            res.json({
+                value: true,
+                data: "Got runs"
+            });
         } else {
             res.json({
                 error: "inValid Format"
