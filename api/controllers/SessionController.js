@@ -335,8 +335,12 @@ module.exports = {
                 console.log("SOCKET CALLED");
             }
         };
+        var getMatchDetails = function(err, data) {
+            Match.getOne(req.body, socketCallback);
+        };
+
         if (req.body.changeComment !== '' && req.body.changeComment) {
-            Session.changeComment(req.body.changeComment, req.body._id, socketCallback);
+            Session.changeComment(req.body.changeComment, req.body._id, getMatchDetails);
             res.json({
                 value: true,
                 data: "Got runs"
