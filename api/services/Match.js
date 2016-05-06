@@ -24,8 +24,6 @@ var schema = new Schema({
     comment: { type: String, default: "" },
     toss: { type: String, default: 0 },
     firstBat: { type: Number, default: 1 },
-    team1score: { type: String, default: 0 },
-    team2score: { type: String, default: 0 },
     status: { type: Boolean, default: false },
     newtarget: { type: String, default: 0 },
     newOvers: { type: Number, default: 0 },
