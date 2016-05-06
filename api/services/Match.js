@@ -21,7 +21,7 @@ var schema = new Schema({
         ref: 'Tournament',
         index: true
     },
-    comment: { type: String, default: 0 },
+    comment: { type: String, default: "" },
     toss: { type: String, default: 0 },
     firstBat: { type: Number, default: 1 },
     team1score: { type: String, default: 0 },
@@ -32,7 +32,7 @@ var schema = new Schema({
     startTime: { type: Date, default: Date.now },
     bat: { type: Number, default: 1 },
     suspended: { type: Boolean, default: false },
-    cupName: { type: String, default: 0 },
+    cupName: { type: String, default: "" },
     team1Runs: { type: Number, default: 0 },
     team1Wicket: { type: Number, default: 0 },
     team1Overs: { type: Number, default: 0 },
