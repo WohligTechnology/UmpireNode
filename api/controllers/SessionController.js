@@ -72,11 +72,12 @@ module.exports = {
         }
     },
     sessionRuns2: function(req, res) {
+      var data2 = {};
         var socketCallback = function(err, data) {
             if (err) {
 
             } else {
-                sails.sockets.broadcast(req.body._id, {
+                sails.sockets.broadcast(data2._id, {
                     data: data,
                     value: true,
                     serverTime: Date()
@@ -85,7 +86,9 @@ module.exports = {
             }
         };
         var getMatchDetails = function(err, data) {
-            Match.getOne(req.body, socketCallback);
+            console.log(data);
+            data2 = {_id:data.match};
+            Match.getOne(data2, socketCallback);
         };
         if (req.body) {
             Session.sessionRuns2(req.body, getMatchDetails);
@@ -284,8 +287,8 @@ module.exports = {
         var getMatchDetails = function(err, data) {
             Match.getOne(req.body, socketCallback);
         };
-        if (req.body.changeDlruns !== '' && req.body.changeDlruns && req.body.changeNewOvers !=='' && req.body.changeNewOvers) {
-            Session.changeDlruns(req.body.changeDlruns,req.body.changeNewOvers, req.body._id, getMatchDetails);
+        if (req.body.changeDlruns !== '' && req.body.changeDlruns && req.body.changeNewOvers !== '' && req.body.changeNewOvers) {
+            Session.changeDlruns(req.body.changeDlruns, req.body.changeNewOvers, req.body._id, getMatchDetails);
             res.json({
                 value: true,
                 data: "Got runs"
@@ -299,7 +302,7 @@ module.exports = {
     // CHANGE SUSPENDED
 
     changeSuspended: function(req, res) {
-      var suspended = false;
+        var suspended = false;
         var socketCallback = function(err, data) {
             if (err) {
 
@@ -310,22 +313,25 @@ module.exports = {
                     serverTime: Date()
                 });
                 console.log("SOCKET CALLED");
-                res.json({data:"suspended Changes",value:true});
+                res.json({
+                    data: "suspended Changes",
+                    value: true
+                });
             }
         };
         var getMatchDetails = function(err, data) {
             Match.getOne(req.body, socketCallback);
         };
 
-            Match.getOne(req.body, function(err,data) {
-              if (req.body._id !== '' && req.body._id) {
-                  Session.changeSuspended( data.suspended,req.body._id, getMatchDetails);
-              } else {
-                  res.json({
-                      error: "inValid Format"
-                  });
-              }
-            });
+        Match.getOne(req.body, function(err, data) {
+            if (req.body._id !== '' && req.body._id) {
+                Session.changeSuspended(data.suspended, req.body._id, getMatchDetails);
+            } else {
+                res.json({
+                    error: "inValid Format"
+                });
+            }
+        });
 
     },
     // CHANGE COMMENT
