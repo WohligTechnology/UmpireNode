@@ -72,7 +72,7 @@ module.exports = {
         }
     },
     sessionRuns2: function(req, res) {
-      var data2 = {};
+        var data2 = {};
         var socketCallback = function(err, data) {
             if (err) {
 
@@ -87,7 +87,9 @@ module.exports = {
         };
         var getMatchDetails = function(err, data) {
             console.log(data);
-            data2 = {_id:data.match};
+            data2 = {
+                _id: data.match
+            };
             Match.getOne(data2, socketCallback);
         };
         if (req.body) {
