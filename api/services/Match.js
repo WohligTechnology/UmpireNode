@@ -24,7 +24,7 @@ var schema = new Schema({
     comment: { type: String, default: "" },
     toss: { type: String, default: 0 },
     firstBat: { type: Number, default: 1 },
-    status: { type: Boolean, default: false },
+    status: { type: String, default: "" },
     newtarget: { type: String, default: 0 },
     newOvers: { type: Number, default: 0 },
     startTime: { type: Date, default: Date.now },
