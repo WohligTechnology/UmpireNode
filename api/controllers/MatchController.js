@@ -93,7 +93,6 @@ module.exports = {
           data: data,
           value: true,
           serverTime: Date(),
-          userid: userdata.userid
         });
       } else {
         res.json({
