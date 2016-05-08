@@ -47,7 +47,7 @@ module.exports = {
     },
     findLimited: function (req, res) {
       if (req.body) {
-          if (req.body.pagenumber && req.body.pagenumber != "" && req.body.pagesize && req.body.pagesize != "") {
+          if (req.body.pagenumber && req.body.pagenumber !== "" && req.body.pagesize && req.body.pagesize !== "") {
               AdminUser.findLimited(req.body, res.callback2);
           } else {
               res.json({
