@@ -88,29 +88,17 @@ module.exports = {
   },
   findOne: function(req, res) {
     var callback = function(err, data) {
-      if (err || !req.session.user) {
+      if (!err) {
         res.json({
-          error: err,
-          value: false,
-          userid: req.session.userid
+          data: data,
+          value: true,
+          serverTime: Date(),
+          userid: userdata.userid
         });
       } else {
-        User.findOne({
-          "_id": req.session.user._id
-        }).exec(function(err, userdata) {
-          if (!err) {
-            res.json({
-              data: data,
-              value: true,
-              serverTime: Date(),
-              userid: userdata.userid
-            });
-          } else {
-            res.json({
-              error: err,
-              value: false
-            });
-          }
+        res.json({
+          error: err,
+          value: false
         });
       }
     };
