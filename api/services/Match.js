@@ -215,7 +215,7 @@ var models = {
                             _id: 0,
                             name: 1
                         }
-                    }]).exec(function (err, data2) {
+                    }]).sort([['_id', -1]]).exec(function (err, data2) {
                         if (err) {
                             console.log(err);
                             callback(err, null);
