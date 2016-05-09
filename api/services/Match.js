@@ -40,7 +40,8 @@ var schema = new Schema({
     favorite: { type: Number, default: 1 },
     rate1: { type: Number, default: 1 },
     rate2: { type: Number, default: 1 },
-    dlRuns: { type: Number, default: 0 }
+    dlRuns: { type: Number, default: 0 },
+      isWicket: { type: Boolean, default: false }
 });
 
 module.exports = mongoose.model('Match', schema);

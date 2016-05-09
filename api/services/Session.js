@@ -314,8 +314,10 @@ var models = {
         var updateVal = {};
         if (bat == 1) {
             updateVal.team1Wicket = newwicket;
+            updateVal.isWicket = true;
         } else {
             updateVal.team2Wicket = newwicket;
+              updateVal.isWicket = true;
         }
         Match.findOneAndUpdate({
             _id: matchid
@@ -361,7 +363,7 @@ var models = {
     // CHANEG BAT
 
     changeSuspended: function( suspended, matchid, callback) {
-    
+
         var newSuspended = false;
         if (suspended === true) {
             newSuspended = false;
