@@ -21,6 +21,7 @@ var models = {
     var user = this(data);
     if (data._id) {
       data.expiry = new Date(data.expiry);
+      data.password=sails.md5(data.password);
       data.userid = new Date();
       this.findOneAndUpdate({
         _id: data._id
