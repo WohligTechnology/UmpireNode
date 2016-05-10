@@ -56,7 +56,7 @@ module.exports = {
             Global.response(err, data, res);
         }
         if (req.body) {
-            if (req.body.pagenumber && req.body.pagenumber != "" && req.body.pagesize && req.body.pagesize != "") {
+            if (req.body.pagenumber && req.body.pagenumber !== "" && req.body.pagesize && req.body.pagesize !== "") {
                 Notification.findLimited(req.body, callback);
             } else {
                 res.json({
